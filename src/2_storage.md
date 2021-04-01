@@ -12,7 +12,7 @@ LVM raid is not used because folders can accomplish the same thing, and all data
 
 What's missing:
 
-1. Snapshots (LVM is not great?)
+1. Snapshot (LVM is not great?)
 2. Snapshot send/receive for ultra-fast backups (à la `btrfs`)
 2. Compression
 
@@ -34,3 +34,19 @@ A separate disk can be used to run Windows.
 ## fscrypt
 
 Use fscrypt to encrypt folders with a password to protect sensitive documents from malware.
+
+## Installation Commands
+
+https://qasimk.io/2020/borg-backup/
+
+Note: dm-integrity max speed is on the order of ~100MiB/s even on an NVMe drive.
+
+
+--allow-discards --persistent X
+periodic trim instead.
+
+dm-integrity does not support discard.
+
+
+Write performance hit nvme - 1.7GB/s vs 374 MB/s - 4.5x slower
+(crypt vs crypt/integrity)
