@@ -50,3 +50,38 @@ dm-integrity does not support discard.
 
 Write performance hit nvme - 1.7GB/s vs 374 MB/s - 4.5x slower
 (crypt vs crypt/integrity)
+
+
+440 vs 179 = 2.5x slower
+
+Encryption has practically no overhead.
+
+
+**IMPORTANT**
+
+Basically dm-integrity is a dead-end.
+
+We are probably better off with using a cshatag approach.
+Store a checksum/mtime of each file in extended attributes.
+Run the checker manually before every backup.
+
+NVMe read @ 6.9 GB/s => 500 GB in 72s
+SSD read @ 0.5 GB/s => 4000 GB in 2 hours
+
+This is probably better than anything else and is more like snapraids approach.
+
+Recover file from backup only. Error exit -> Prevent backup.
+
+md5 = 138240/3s 16k
+sha1 = 315856/3s 16k ~~ 1.6 GB/s
+sha256 = 249840/3s 16k
+
+## Smart
+
+...
+
+### Installation
+
+Basically as above
+
+pacstrap: linux linux-firmware
