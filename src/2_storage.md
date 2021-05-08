@@ -84,4 +84,22 @@ sha256 = 249840/3s 16k
 
 Basically as above
 
-pacstrap: linux linux-firmware
+pacstrap: base linux linux-lts linux-firmware amd-ucode vim tmux htop man-db man-pages texinfo iwd
+
+crda - iwd
+python
+lm_sensors
+lsof
+strace
+
+
+
+cryptroot = e6e67e3d-c904-254b-a433-4a982d3be70c (PARTUUID)
+root = 1ee89039-468a-45e3-bc6b-80ae9ea6366a (UUID)
+
+efibootmgr --disk /dev/nvme0n1 --part 1 --create --label "Arch Linux" --loader /vmlinuz-linux --unicode 'cryptdevice=PARTUUID=e6e67e3d-c904-254b-a433-4a982d3be70c:root root=UUID=1ee89039-468a-45e3-bc6b-80ae9ea6366a rw initrd=\amd-ucode.img initrd=\initramfs-linux.img' --verbose
+
+
+Set perm flags;
+
+cryptsetup --allow-discards --perf-no_read_workqueue --perf-no_write_workqueue --persistent open ...
