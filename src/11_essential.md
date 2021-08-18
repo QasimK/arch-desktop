@@ -17,6 +17,22 @@ setxkbmap -layout gb
 
 ## SWAY
 
+https://arewewaylandyet.com/
+
 ### Lock screen
 
 https://old.reddit.com/r/swaywm/comments/n344ey/swaylock_alternatives/gx0jkt8/
+
+### App launcher
+
+yofi?
+
+### Screenshots
+
+flameshot?
+
+### Screen Sharing
+
+### Screen Recording
+
+### Status Bar

@@ -14,3 +14,7 @@
 TODO: lockdown mode
 
 READ kernel messages - `journalctl -b`, it will spot errors!
+
+TODO: Use linux-zen for desktop for better responsiveness (https://liquorix.net/)
+
+TODO: Use paru instead of yay (next version).
