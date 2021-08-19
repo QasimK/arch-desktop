@@ -6,6 +6,8 @@ The purpose of this book is to document a bespoke installation of Arch Linux on 
 2. Protecting data from hardware failure, accidents, and bitrot
 3. Dual booting with Windows
 
+It is divided into 0x (system setup), and 1y (user setup).
+
 ## Hardware
 
 The most significant choices here are:

@@ -76,9 +76,3 @@ However, the risk of the storage array failing increases with every disk. RAID m
 ## bcachefs
 
 The ideal solution would be [bcachefs](https://bcachefs.org/) but it is far, far from feature-complete and battle-hardened.
-
-## SMART
-
-Monitoring disks.
-
-TODO: Be smart, and do this.

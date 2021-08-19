@@ -15,9 +15,6 @@ xorg-xinit
 
 setxkbmap -layout gb
 
-## SWAY
-
-https://arewewaylandyet.com/
 
 ### Lock screen
 
