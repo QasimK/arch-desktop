@@ -35,4 +35,6 @@ efibootmgr \
 
 Set perm flags;
 
-cryptsetup --allow-discards --perf-no_read_workqueue --perf-no_write_workqueue --persistent open ...
+cryptsetup --persistent --perf-no_read_workqueue --perf-no_write_workqueue  open ...
+
+## Installation
