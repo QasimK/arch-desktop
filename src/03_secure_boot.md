@@ -1,5 +1,7 @@
 # Secure boot
 
+https://gist.github.com/umbernhard/d1f4a44430d6d21b3881652c7a7c9ae5
+
 ## Password-protect the firmware
 
 Prevent modifications to UEFI settings with a password.
@@ -18,4 +20,4 @@ Look at sbupdate, sbctl, *dracut*
 
 ## Encrypted boot
 
-Why..?
+There is no particular reason to do this.

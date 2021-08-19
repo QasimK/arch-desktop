@@ -10,6 +10,7 @@
 5. b. `vm.swappiness=1`
 5. c. `kernel.kexec_load_disabled=1`
 6. Install crda - /etc/conf.d/wireless-regdom
+7. Use `doas` instead of sudo.
 
 TODO: lockdown mode
 

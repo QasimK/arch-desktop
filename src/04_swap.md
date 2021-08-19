@@ -1,6 +1,6 @@
 # Swap
 
-1. Don't use it.
+1. Don't bother, buy more RAM instead.
 
 2. Use in-memory zswap or zram.
 
