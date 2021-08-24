@@ -1,21 +1,144 @@
 # System config
 
-1. SSHD harden
-2. a. Pacman config changes
-2. b. Pacman cache - https://qasimk.gitbooks.io/piserver-book/content/initial-setup.html
-2. c. Simplified https://github.com/gs93/pakbak
-3. fstrim timer
-4. umask - https://wiki.archlinux.org/index.php/Umask#Set_the_mask_value
-5. a. sysctl - kernel.yama.ptrace_scope=3,
-5. b. `vm.swappiness=1`
 5. c. `kernel.kexec_load_disabled=1`
-6. Install crda - /etc/conf.d/wireless-regdom
-7. Use `doas` instead of sudo.
 
 TODO: lockdown mode
 
 READ kernel messages - `journalctl -b`, it will spot errors!
 
-TODO: Use linux-zen for desktop for better responsiveness (https://liquorix.net/)
-
 TODO: Use paru instead of yay (next version).
+
+## Time sync
+
+```
+systemctl enable --now systemd-timesyncd
+timedatectl set-ntp true
+```
+
+## Pacman settings
+
+Configure `/etc/pacman.conf` to enable `Color`, `CheckSpace`, `VerbosePkgLists`, and `ParallelDownloads = 5`.
+
+Install `paccache`:
+
+```
+pacman -S --needed pacman-contrib
+```
+
+Automatically remove all versions of an uninstalled package:
+
+`/etc/pacman.d/hooks/paccache-remove.hook`
+
+```ini
+[Trigger]
+Operation = Remove
+Type = Package
+Target = *
+
+[Action]
+Description = Removing package cache for uninstalled packages...
+When = PostTransaction
+Exec = /usr/bin/paccache -ruk0
+```
+
+Keep only the latest three versions of each installed package:
+
+`/etc/pacman.d/hooks/paccache-upgrade.hook`
+
+
+```ini
+[Trigger]
+Operation = Upgrade
+Type = Package
+Target = *
+
+[Action]
+Description = Removing old cached packages...
+When = PostTransaction
+Exec = /usr/bin/paccache -rk3
+```
+
+Backup the local pacman database when it changes to facilitate restore:
+
+`/etc/pacman.d/hooks/pacbackup.hook`
+
+```ini
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Operation = Remove
+Type = Package
+Target = *
+
+[Action]
+Description = Backing up database...
+When = PostTransaction
+Exec = /usr/bin/tar --create --zstd --file /root/pacman-backup.zstd.tar --directory / var/lib/pacman/local
+```
+
+(This would have saved my hide!)
+
+Optimise the `mirrorlist` mirrorlist using `reflector`: `pacman -S --needed reflector`.
+
+`/etc/xdg/reflector/reflector.conf`
+
+```
+--save /etc/pacman.d/mirrorlist
+--protocol https
+--country 'United Kingdom'
+--latest 5
+--sort rate
+--ipv4
+```
+
+Enable the weekly timer `systemctl enable reflector.timer`.
+
+Ignore new mirrorlist files:
+
+`/etc/pacman.conf`
+
+```
+NoExtract = /etc/pacman.d/mirrorlist
+```
+
+## Trim
+
+Enable weekly trim of filesystems.
+
+```terminal
+systemctl enable --now fstrim.timer
+```
+
+(Note this leaks empty spaces on encrypted drives.)
+
+## Journald
+
+Reduce the journal size because who really needs 4 GiB of logs?
+
+`/etc/systemd/journald.conf.d/00-journal-size.conf`
+
+```ini
+[Journal]
+SystemMaxUse=50M
+```
+
+## doas
+
+Use `doas` instead of `sudo` because it is simpler.
+
+```terminal
+pacman -S --needed opendoas
+```
+
+Note: Consider not using this and opening a tty with root instead.
+
+## Ananicy
+
+Unfortunately, this is AUR.
+
+# Safety features
+
+```
+truncate -s 500M /freespace
+touch -- /-i && chmod 0444 -- /-i
+```

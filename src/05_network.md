@@ -4,7 +4,11 @@ Use iwd for wireless. `iwctl` cli.
 
 Setup iwd config to enable built-in DHCP.
 
+vim /etc/iwd/main.conf.
+
 But since it's a desktop, just assign a static one. We'll need to add a static route as well then.
+
+Note: static config is not saved across reboots. So don't actually do this :)
 
 ## Route
 
@@ -48,6 +52,12 @@ It's possible to use more secure DNS resolvers:
 TODO: Note: dnscrypt-proxy has literally added support for ODoH, but waiting for new release. Who knew Arch Linux could be so behind :p
 
 Use `getent hosts google.com` to test timing.
+
+## WiFi crda
+
+Configure the wireless regulation domain:
+
+`/etc/conf.d/wireless-regdom`
 
 ---
 
