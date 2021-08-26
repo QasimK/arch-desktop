@@ -8,7 +8,7 @@ Possible enhancements:
 2. Ask for a password in the script and use it for each command
 3. Use LVM to create a temporary snapshot
 
-Veracrypt - disable "preserve modification timestamp of file containers".
+Veracrypt - disable "preserve modification timestamp of file containers" because otherwise changes will not be picked up by Borg.
 
 ## Borg
 

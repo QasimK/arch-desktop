@@ -41,7 +41,9 @@ swaymsg -t get_inputs
 TODO: xkb_options, layers, etc. This is all confusing.
     man xkeyboard-config
 
-Use `libinput show-events` to get keyboard keys.
+Use `libinput debug-events --show-keycodes` to get keyboard keys.
+
+(THIS IS WRONG, YOU WANT `wev` but that is AUR!)
 
 The common media keys are:
 

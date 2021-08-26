@@ -2,19 +2,25 @@
 
 The CLI tools are an excellent complement to a GUI.
 
-## Dash
+## Scripting
 
-Use dash for scripts because it has a faster start up time (1.5ms vs 3ms).
+Use `dash` for scripts because it has a faster start up time (1.5ms vs 3ms).
 
-```
+```terminal
 pacman -S --needed dash
+```
+
+Use `shellcheck` to check scripts for errors.
+
+```terminal
+pacman -S --needed shellcheck
 ```
 
 ## Lock screen
 
 I have found `swaylock` to actually be surprisingly unreliable. Instead use `physlock`:
 
-```
+```terminal
 pacman -S --needed physlock
 ```
 
@@ -24,7 +30,7 @@ Note: use the `-s` flag to disable sysrq hotkeys (if you have enabled them).
 
 Create a script called `,lock`:
 
-```
+```sh
 #!/usr/bin/dash
 exec physlock -m
 ```
@@ -38,4 +44,4 @@ Ref: <https://old.reddit.com/r/swaywm/comments/n344ey/swaylock_alternatives/gx0j
 * `mosh`, `fish`, `vim`
 * `nnn` - file browser
 * `trash-cli` - it's safer!
-* `desktop-file-utils` - for creating .desktop files
+* `desktop-file-utils` - for creating .desktop files?

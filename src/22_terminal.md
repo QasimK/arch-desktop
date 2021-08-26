@@ -17,7 +17,7 @@ Two alternatives:
 
 Select text: `<ctrl>-<shift>-<space>`
 
-* v character
+* v (character)
 * alt-v (semantic)
 * shift-v (line)
 * ctrl-v (block)
