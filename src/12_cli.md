@@ -4,16 +4,16 @@ The CLI tools are an excellent complement to a GUI.
 
 ## Scripting
 
-Use `dash` for scripts because it has a faster start up time (1.5ms vs 3ms).
+Use `dash` for scripts because it has a faster start up time (1.5ms vs 3ms for bash).
 
 ```terminal
-pacman -S --needed dash
+pacmatic -S --needed dash
 ```
 
 Use `shellcheck` to check scripts for errors.
 
 ```terminal
-pacman -S --needed shellcheck
+pacmatic -S --needed shellcheck
 ```
 
 ## Lock screen
@@ -21,7 +21,7 @@ pacman -S --needed shellcheck
 I have found `swaylock` to actually be surprisingly unreliable. Instead use `physlock`:
 
 ```terminal
-pacman -S --needed physlock
+pacmatic -S --needed physlock
 ```
 
 Lock with `physlock -m`.
@@ -32,7 +32,7 @@ Create a script called `,lock`:
 
 ```sh
 #!/usr/bin/dash
-exec physlock -m
+exec physlock -ms
 ```
 
 (This will let us easily change this in the future if we want to.)

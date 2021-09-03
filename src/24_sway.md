@@ -4,7 +4,7 @@ We are finally here.
 
 <https://arewewaylandyet.com/>
 
-`pacman -S --needed sway`
+`pacmatic -S --needed sway`
 
 ## Start script
 
@@ -51,9 +51,17 @@ The common media keys are:
 
 ## Lock screen
 
-`pacman -S --needed swayidle`
+Configure a keyboard shortcut:
 
 `~/.config/sway/config`
+
+```
+bindsym --release Ctrl+Shift+l exec ',lock'
+```
+
+`pacmatic -S --needed swayidle`
+
+`~/.config/swayidle/config`
 
 ```
 timeout 300 ',lock'
@@ -63,7 +71,7 @@ after-sleep ',lock'
 
 ## Notifications
 
-`pacman -S --needed dunst libnotify`
+`pacmatic -S --needed dunst libnotify`
 
 <https://www.galago-project.org/specs/notification/>
 

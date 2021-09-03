@@ -12,7 +12,7 @@ Note: static config is not saved across reboots. So don't actually do this :)
 
 ## Route
 
-Static:
+Static (not recommended):
 
 ```
 ip route add 192.168.121.1 dev wlan0
@@ -21,7 +21,7 @@ ip route add default via 192.168.121.1 dev wlan0
 
 ## IP Address
 
-Static:
+Static (not recommended):
 
 ```
 ip address add 192.168.121.2/32 broadcast + dev wlan0

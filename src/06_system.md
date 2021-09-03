@@ -22,7 +22,7 @@ Configure `/etc/pacman.conf` to enable `Color`, `CheckSpace`, `VerbosePkgLists`,
 Install `paccache`:
 
 ```
-pacman -S --needed pacman-contrib
+pacmatic -S --needed pacman-contrib
 ```
 
 Automatically remove all versions of an uninstalled package:
@@ -78,7 +78,7 @@ Exec = /usr/bin/tar --create --zstd --file /root/pacman-backup.zstd.tar --direct
 
 (This would have saved my hide!)
 
-Optimise the `mirrorlist` mirrorlist using `reflector`: `pacman -S --needed reflector`.
+Optimise the `mirrorlist` mirrorlist using `reflector`: `pacmatic -S --needed reflector`.
 
 `/etc/xdg/reflector/reflector.conf`
 
@@ -127,7 +127,7 @@ SystemMaxUse=50M
 Use `doas` instead of `sudo` because it is simpler.
 
 ```terminal
-pacman -S --needed opendoas
+pacmatic -S --needed opendoas
 ```
 
 Note: Consider not using this and opening a tty with root instead.
@@ -136,7 +136,9 @@ Note: Consider not using this and opening a tty with root instead.
 
 Unfortunately, this is AUR.
 
-# Safety features
+## Safety features
+
+Some free space that can be deleted if ever necessary.
 
 ```
 truncate -s 500M /freespace

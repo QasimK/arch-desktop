@@ -26,7 +26,7 @@ Ref: <https://wiki.archlinux.org/title/Metric-compatible_fonts>
 
 ## Configuration
 
-`pacman -S --needed fontconfig`
+`pacmatic -S --needed fontconfig`
 
 ```
 cd /etc/fontconf/conf.d

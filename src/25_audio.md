@@ -1,6 +1,6 @@
 # Audio
 
-`pacman -S alsa-utils`
+`pacmatic -S alsa-utils`
 
 Use `alsamixer` to explore your speakers and microphones. Find the right "card" with `F6`.
 

@@ -11,3 +11,6 @@ Sensitive documents must be encrypted locally.
 Alternative: https://cryptomator.org/
 
 [cryfs-compare]: https://www.cryfs.org/comparison
+
+## Resilio
+

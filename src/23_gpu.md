@@ -5,7 +5,7 @@ This will vary depending on your GPU manufacturer.
 Hardware acceleration for videos etc.
 
 ```terminal
-pacman -S --needed mesa vulkan-radeon libva-mesa-driver mesa-vdpau
+pacmatic -S --needed mesa vulkan-radeon libva-mesa-driver mesa-vdpau
 ```
 
 (`amdvlk` is pretty much the same as `vulkan-radeon` but has a larger install size)

@@ -1,7 +1,7 @@
 # Create a new user
 
 ```terminal
-pacman -S --needed xdg-user-dirs
+pacmatic -S --needed xdg-user-dirs
 useradd --create-home --shell /usr/bin/fish me
 passwd me
 ```

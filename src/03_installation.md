@@ -26,8 +26,14 @@ mount -o noatime,lazytime ...
 (huge is one inode per 64k, default is per 16k)
 (reserve 1% for optimum ssd performance anyway)
 
-pacstrap /mnt base linux linux-zen linux-lts linux-firmware amd-ucode efibootmgr man-db man-pages texinfo vim tmux htop fish iwd crda lm_sensors lsof strace python
+pacstrap /mnt base linux linux-zen linux-lts linux-firmware amd-ucode efibootmgr man-db man-pages texinfo vim tmux htop fish iwd python pacmatic
 
+First thing after installing, install optional
+
+pacmatic -S --needed --asdeps crda (iwd)
+pacmatic -S --needed --asdeps pkgfile (fish)
+pacmatic -S --needed --asdeps python-html2text (pacmatic)
+pacmatic -S --needed --asdeps lm_sensors lsof strace (htop)
 
 Create a script:
 
