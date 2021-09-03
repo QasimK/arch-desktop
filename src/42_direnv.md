@@ -1,3 +1,3 @@
 # direnv
 
-Unfortunately this is in the AUR.
+Unfortunately, like other good things, this is in the AUR.
