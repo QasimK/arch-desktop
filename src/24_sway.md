@@ -19,10 +19,14 @@ CLUTTER_BACKEND=wayland
 SDL_VIDEODRIVER=wayland
 MOZ_ENABLE_WAYLAND=1
 
-exec sway
+exec dbus-run-session sway
 ```
 
 Run it with `exec ,sway`.
+
+`dbus-run-session` allows us to open multiple sways.
+
+TODO: `NO_AT_BRIDGE=1`?
 
 ## Configuration
 

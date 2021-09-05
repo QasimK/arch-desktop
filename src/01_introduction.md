@@ -11,7 +11,10 @@ It is divided into:
 * 0x (system setup)
 * 1y (user CLI)
 * 2z (user GUI)
-* 4a (coding)
+* 3a (apps)
+* 4b (coding)
+
+Note: `me` will refer to our main user account.
 
 ## Hardware
 

@@ -19,7 +19,7 @@ cryptsetup --persistent --perf-no_read_workqueue --perf-no_write_workqueue open 
 
 (no work queues for SSD)
 
-mkfs.ext4 -v -L root -T huge -m 1 /dev/mapper/clearroot
+mkfs.ext4 -v -L root -T huge -m 1 -O encrypt /dev/mapper/clearroot
 
 mount -o noatime,lazytime ...
 

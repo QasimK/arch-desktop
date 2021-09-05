@@ -1,12 +1,19 @@
 # System config
 
-5. c. `kernel.kexec_load_disabled=1`
-
 TODO: lockdown mode
 
 READ kernel messages - `journalctl -b`, it will spot errors!
 
 TODO: Use paru instead of yay (next version).
+
+## Pacmatic Fix
+
+Note: you may need a temporary fix for `pacmatic`:
+
+<https://github.com/keenerd/pacmatic/issues/41>
+<https://github.com/keenerd/pacmatic/pull/42/files>
+
+Or, alternatively set the environment variable `rss_feed=https://archlinux.org/feeds/news/`.
 
 ## Time sync
 

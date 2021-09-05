@@ -1,6 +1,8 @@
 # Audio
 
-`pacmatic -S alsa-utils`
+Some people say ALSA only supports audio from one application at a time, but... that is simply not true.
+
+`pacmatic -S --needed alsa-utils`
 
 Use `alsamixer` to explore your speakers and microphones. Find the right "card" with `F6`.
 
@@ -33,7 +35,7 @@ This gives us the format, rate(s) and number of channels.
 
 We can create an alias for the microphone to make it (a bit) easier to use:
 
-`~/.asoundrc`
+`~/.config/alsa/asoundrc`
 
 ```
 # Alias: arecord -D mic -f S16_LE -r 48000 -c 1 record.wav
@@ -58,9 +60,9 @@ cat /proc/asound/card1/codec\#0
 
 It is a lot of output, but you can parse for the rates and formats.
 
-Set the playback device
+Set the playback device:
 
-`~/.asoundrc`
+`~/.config/alsa/asoundrc`
 
 ```
 # Playback default
