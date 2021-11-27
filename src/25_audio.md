@@ -72,11 +72,15 @@ defaults.pcm.device 0
 defaults.ctl.card 1
 ```
 
+Test: `speaker-test -c2 -D ...`
+
 Play the recording: `aplay record.wav`.
 
 **NOTE: Do not forget to unmute the microphone and speakers with alsamixer**.
 
 Or we could do `mpv record.wav`.
+
+SEE: <https://wiki.archlinux.org/title/Advanced_Linux_Sound_Architecture/Troubleshooting#HDMI>
 
 ## Volume
 

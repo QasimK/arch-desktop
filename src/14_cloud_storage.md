@@ -19,6 +19,8 @@ TODO: PKGBUILD has a bug where it doesn't set chmod o+r for /etc/rslsync.conf
 
 Follow the setup instructions.
 
+**TODO: reduce logging.**
+
 Sample config:
 
 `~/.config/rslsync/rslsync.conf`
@@ -83,8 +85,21 @@ NOTE: The WebUI will prompt you for a name—this is your _identity_. It can be 
 
 ## Dropbox
 
-Follow the setup instructions.
+Follow the setup instructions: <https://wiki.archlinux.org/title/Dropbox>.
 
-Except. To put the dropbox folder somewhere other than the root of the home directory, we must set the `HOME` environment variable to the parent directory where we want the dropbox folder.
+Except. To put the Dropbox folder somewhere other than the root of the home directory, we must set the `HOME` environment variable to the parent directory where we want the Dropbox folder.
 
-There is a `dropbox.py` CLI script that I couldn't get to work. Oh well, we don't really need to interact with it now.
+```sh
+systemctl --user edit dropbox.service
+```
+
+```ini
+[Service]
+Environment="HOME=/home/me/Documents"
+```
+
+```sh
+systemctl --user enable --now dropbox.service
+```
+
+There is a `dropbox.py` CLI script that I couldn't get working. Oh well, we don't really need to interact with it now.

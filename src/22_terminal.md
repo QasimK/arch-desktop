@@ -33,3 +33,7 @@ Spawn new instances in the same directory with ctrl-shift-enter:
 key_bindings:
   - { key: Return,   mods: Control|Shift, action: SpawnNewInstance }
 ```
+
+## abduco
+
+TODO: Attach/Detach?
