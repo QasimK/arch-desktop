@@ -26,6 +26,17 @@ Ref: <https://wiki.archlinux.org/title/PDF,_PS_and_DjVu>
 
 Note: `zathura` tracks history in `~/.local/share/zathura`.
 
+### Modifying PDFs
+
+Use `pdftk`.
+
+```terminal
+pacmatic -S --needed pdftk
+pacamtic -S --asdeps bcprov
+```
+
+(The latter dependency is to support signed/encrypted PDFs.)
+
 ## Office
 
 ```

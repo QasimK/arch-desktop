@@ -19,8 +19,6 @@ TODO: PKGBUILD has a bug where it doesn't set chmod o+r for /etc/rslsync.conf
 
 Follow the setup instructions.
 
-**TODO: reduce logging.**
-
 Sample config:
 
 `~/.config/rslsync/rslsync.conf`
@@ -82,6 +80,8 @@ systemctl --user enable --now rslsync.service
 ```
 
 NOTE: The WebUI will prompt you for a name—this is your _identity_. It can be the same across all your devices.
+
+Reduce logging under Advanced settings.
 
 ## Dropbox
 
