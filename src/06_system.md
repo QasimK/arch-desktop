@@ -108,6 +108,14 @@ Ignore new mirrorlist files:
 NoExtract = /etc/pacman.d/mirrorlist
 ```
 
+### Package Stats
+
+Consider opting-in to telemetry on package statistics:
+
+<https://pkgstats.archlinux.de/>
+
+Stats: <https://pkgstats.archlinux.de/fun>
+
 ## Trim
 
 Enable weekly trim of filesystems.

@@ -2,6 +2,8 @@
 
 Follow the [Arch Wiki](https://wiki.archlinux.org/title/Installation_guide) using the specific commands below.
 
+Consider using [Ventoy](https://www.ventoy.net/en/index.html) to _easily_ create a bootable USB drive.
+
 Storage Commands: <https://qasimk.io/2020/borg-backup/>
 
 fdisk
