@@ -23,3 +23,7 @@ Use `powertop`.
 Use `cpulimit` to limit cpu core usage of a process.
 
 Use `nice` and `ionice` to adjust cpu and io priority of a process.
+
+## Stress Test:
+
+Consider: https://github.com/stressapptest/stressapptest
