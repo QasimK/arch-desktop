@@ -12,6 +12,7 @@ Alternative: https://cryptomator.org/
 
 [cryfs-compare]: https://www.cryfs.org/comparison
 
+`fscrypt` is probably the best Linux-only solution.
 
 ## Resilio
 
@@ -103,3 +104,29 @@ systemctl --user enable --now dropbox.service
 ```
 
 There is a `dropbox.py` CLI script that I couldn't get working. Oh well, we don't really need to interact with it now.
+
+## CryFS
+
+Encrypt files in cloud storage on desktop operating systems.
+
+`fscrypt` is not appropriate because it encrypts/decrypts files in-place.
+
+**WARNING:** Ensure only one device has the encrypted folder mounted.
+
+```sh
+pacmatic -S --needed cryfs
+```
+
+Create an encrypted folder:
+
+```sh
+cryfs ~/encrypted ~/mountpoint
+```
+
+Mount an encrypted folder:
+
+```sh
+cryfs --foreground --fuse-option noatime ~/encrypted ~/mountpoint
+```
+
+See <https://www.cryfs.org/tutorial>.
