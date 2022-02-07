@@ -2,21 +2,11 @@
 
 Use cloud storage as a mirror of local storage rather than as a replacement (unless you're talking about terabytes of data...).
 
-Sensitive documents must be encrypted locally.
-
-[CryFs][cryfs-compare] is one possible solution. The comparison shows the main advantage over Veracrypt is not needing a statically-sized container file, and authenticated encryption (to prevent tampering).
-
-**Warning:** Data corruption is possible on power loss, system crashes, and multiple writers.
-
-Alternative: https://cryptomator.org/
-
-[cryfs-compare]: https://www.cryfs.org/comparison
-
-`fscrypt` is probably the best Linux-only solution.
+Sensitive documents should be encrypted locally.
 
 ## Resilio
 
-TODO: PKGBUILD has a bug where it doesn't set chmod o+r for /etc/rslsync.conf
+TODO: PKGBUILD has a bug where it doesn't set chmod o+r for `/etc/rslsync.conf`.
 
 Follow the setup instructions.
 
@@ -42,9 +32,8 @@ Sample config:
   , "download_limit" : 0
   , "upload_limit" : 0
 
-
   , "webui": {
-        // Remove field to disable WebUI
+        // Remove "listen" field to disable WebUI
         "listen" : "127.0.0.1:8888"
       , "login": "me"
       , "allow_empty_password": true
@@ -109,9 +98,13 @@ There is a `dropbox.py` CLI script that I couldn't get working. Oh well, we don'
 
 Encrypt files in cloud storage on desktop operating systems.
 
-`fscrypt` is not appropriate because it encrypts/decrypts files in-place.
+The [CryFs comparison table](https://www.cryfs.org/comparison) shows the main advantage over Veracrypt is not needing a statically-sized container file, and authenticated encryption (to prevent tampering).
 
-**WARNING:** Ensure only one device has the encrypted folder mounted.
+`fscrypt` is not appropriate because it encrypts/decrypts files in-place which causes unnecessary and dangerous syncing.
+
+**Note:** Ensure only one device has the encrypted folder mounted.
+
+**Warning:** Data corruption is possible on power loss, system crashes, and multiple writers.
 
 ```sh
 pacmatic -S --needed cryfs
