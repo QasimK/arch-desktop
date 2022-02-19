@@ -53,7 +53,7 @@ efibootmgr \
     --label "Arch Linux" \
     --loader /vmlinuz-linux \
     --verbose \
-    --unicode 'cryptdevice=PARTLABEL=mypartlabel:clearroot root=/dev/mapper/clearroot rw nowatchdog consoleblack=300 quiet splash initrd=\amd-ucode.img initrd=\initramfs-linux.img'
+    --unicode 'cryptdevice=PARTLABEL=mypartlabel:clearroot root=/dev/mapper/clearroot rw nowatchdog consoleblank=300 quiet splash initrd=\amd-ucode.img initrd=\initramfs-linux.img'
 ```
 
 Be sure to add the fallbacks and other kernels.

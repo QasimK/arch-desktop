@@ -16,6 +16,12 @@ Use `shellcheck` to check scripts for errors.
 pacmatic -S --needed shellcheck
 ```
 
+Use `checkbashisms` to check for `sh` vs `bash` peculiarities:
+
+```terminal
+pacmatic -S --needed checkbashisms
+```
+
 ## Lock screen
 
 I have found `swaylock` to actually be surprisingly unreliable. Instead use `physlock`:

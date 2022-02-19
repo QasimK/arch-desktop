@@ -1,5 +1,7 @@
 ## Font
 
+TODO: https://old.reddit.com/r/archlinux/comments/sltmoi/update_changed_the_font/
+
 We need a basic fallback font:
 
 * ttf-dejavu (basic font families: serif, sans-serif, and monospace)

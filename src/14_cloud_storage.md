@@ -94,6 +94,17 @@ systemctl --user enable --now dropbox.service
 
 There is a `dropbox.py` CLI script that I couldn't get working. Oh well, we don't really need to interact with it now.
 
+## Google Drive
+
+Use rclone.
+
+Copy folders like
+
+```sh
+
+rclone copy --progress "drive:<folder>" "<folder>"
+```
+
 ## CryFS
 
 Encrypt files in cloud storage on desktop operating systems.

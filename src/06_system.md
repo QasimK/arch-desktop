@@ -85,6 +85,8 @@ Exec = /usr/bin/tar --create --zstd --file /root/pacman-backup.zstd.tar --direct
 
 (This would have saved my hide!)
 
+TODO: https://wiki.archlinux.org/title/Pacman/Tips_and_tricks#List_of_installed_packages
+
 Optimise the `mirrorlist` mirrorlist using `reflector`: `pacmatic -S --needed reflector`.
 
 `/etc/xdg/reflector/reflector.conf`
