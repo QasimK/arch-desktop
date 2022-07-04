@@ -32,7 +32,7 @@ pacstrap /mnt base linux linux-zen linux-lts linux-firmware amd-ucode efibootmgr
 
 First thing after installing, install optional
 
-pacmatic -S --needed --asdeps crda (iwd)
+pacmatic -S --needed --asdeps wireless-regdb (iwd)
 pacmatic -S --needed --asdeps pkgfile (fish)
 pacmatic -S --needed --asdeps python-html2text (pacmatic)
 pacmatic -S --needed --asdeps lm_sensors lsof strace (htop)

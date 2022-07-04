@@ -13,6 +13,28 @@ Two alternatives:
 
 (note: this installs some X dependencies.)
 
+## Set TERM (terminfo)
+
+TODO: SSH - https://news.ycombinator.com/item?id=29561140
+
+```
+S=my_server ; ssh $S 'mkdir -p ~/.terminfo/f/' ; scp /usr/share/terminfo/f/foot $S:~/.terminfo/f/foot
+```
+
+## foot
+
+```
+pacmatic -S --needed foot
+pacmatic -S --asdeps foot-terminfo
+```
+
+TODO: Usage & config:
+
+```
+foot --server
+footclient
+```
+
 ## Alacritty
 
 Select text: `<ctrl>-<shift>-<space>`

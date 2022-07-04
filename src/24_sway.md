@@ -26,7 +26,7 @@ Run it with `exec ,sway`.
 
 `dbus-run-session` allows us to open multiple sways.
 
-TODO: `NO_AT_BRIDGE=1`?
+TODO: `NO_AT_BRIDGE=1`? pam_environment vs script.
 
 ## Configuration
 

@@ -6,6 +6,9 @@ Some people say ALSA only supports audio from one application at a time, but... 
 
 Use `alsamixer` to explore your speakers and microphones. Find the right "card" with `F6`.
 
+MM = Mute
+00 = Open
+
 ## Set default
 
 `cat /proc/asound/modules`

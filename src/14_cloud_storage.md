@@ -6,7 +6,7 @@ Sensitive documents should be encrypted locally.
 
 ## Resilio
 
-TODO: PKGBUILD has a bug where it doesn't set chmod o+r for `/etc/rslsync.conf`.
+TODO: `PKGBUILD` has a bug where it doesn't set `chmod o+r /etc/rslsync.conf`. In fact it doesn't set any file permissions at all.
 
 Follow the setup instructions.
 
@@ -101,8 +101,13 @@ Use rclone.
 Copy folders like
 
 ```sh
-
 rclone copy --progress "drive:<folder>" "<folder>"
+```
+
+Mount the whole drive like:
+
+```sh
+rclone mount --vfs-cache-mode full "drive:" "<folder>"
 ```
 
 ## CryFS

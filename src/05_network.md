@@ -82,7 +82,7 @@ systemctl enable --now dnscrypt-proxy.service
 
 We can test timing and caching with `time getent hosts google.com`.
 
-## WiFi crda
+## WiFi wireless-regdb
 
 Configure the wireless regulation domain:
 
