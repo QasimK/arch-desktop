@@ -13,7 +13,21 @@ As described in `man pam_umask`, set the global umask for all logins:
 `/etc/pam.d/login`
 
 ```
-session optional pam_umask.so umask=0027
+session optional pam_umask.so
+```
+
+Set default in /etc/login.defs
+
+```
+UMASK       027
+```
+
+**Remove** umask in /etc/profile:
+
+`/etc/profile`
+
+```
+umask=027
 ```
 
 ## Restrict logins to specific accounts

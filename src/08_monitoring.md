@@ -4,15 +4,29 @@
 
 TODO: Be smart and write this section.
 
-## iotop
+## htop
 
-See accumulation of disk activity by processes:
-
-`iotop -aoP`
+Processes....
 
 ## GPU (AMD)
 
 Use `radeontop`.
+
+## GPU
+
+### Intel
+
+```terminal
+pacmatic -S --needed intel-gpu-tools
+```
+
+Monitor with:
+
+```terminal
+intel_gpu_top
+```
+
+### AMD
 
 ## Power
 

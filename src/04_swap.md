@@ -16,4 +16,6 @@ If it is used, for increased responsiveness, use a large swap with
 
 `/etc/sysctl.d/99-swappiness.conf`: `vm.swappiness=1`
 
+(still relevant for SSD???)
+
 Or a small swap with the default swappiness.

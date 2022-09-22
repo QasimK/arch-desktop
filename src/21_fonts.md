@@ -20,6 +20,7 @@ We need a font for coding:
 We need a fallback font for every other Unicode symbol:
 
 * noto-fonts (full coverage - cjk, emoji for fallback)
+    --asdeps noto-fonts-cjk noto-fonts-emoji noto-fonts-extra
 
 There are many other substitutes in the AUR.
 
@@ -31,7 +32,7 @@ Ref: <https://wiki.archlinux.org/title/Metric-compatible_fonts>
 `pacmatic -S --needed fontconfig`
 
 ```
-cd /etc/fontconf/conf.d
+cd /etc/fonts/conf.d
 ln -s /usr/share/fontconfig/conf.avail/09-autohint-if-no-hinting.conf
 ln -s /usr/share/fontconfig/conf.avail/10-sub-pixel-rgb.conf
 ln -s /usr/share/fontconfig/conf.avail/11-lcdfilter-default.conf

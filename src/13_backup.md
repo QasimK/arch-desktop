@@ -26,6 +26,7 @@ Use xattrs for mtime checks and a different directory for storage.
 
 ```sh
 pacmatic -S --needed borgmatic
+pacmatic -S --needed --asdeps python-llfuse
 ```
 
 ## Bitrot

@@ -2,13 +2,43 @@
 
 Use iwd for wireless. `iwctl` cli.
 
+## Special status IWD
+
 Setup iwd config to enable built-in DHCP.
 
+```
 vim /etc/iwd/main.conf.
+
+[General]
+EnableNetworkConfiguration=true
+```
+
+```
+vim /var/lib/iwd/spaceship.psk
+
+[IPv4]
+Address=192.168.1.10
+Netmask=255.255.255.0
+Gateway=192.168.1.1
+Broadcast=192.168.1.255
+```
+
+```
+/etc/resolv.conf
+
+namesever 1.1.1.1
+```
 
 But since it's a desktop, just assign a static one. We'll need to add a static route as well then.
 
 Note: static config is not saved across reboots. So don't actually do this :)
+
+## WiFi wireless-regdb
+
+Configure the wireless regulation domain:
+
+`/etc/conf.d/wireless-regdom`
+
 
 ## Route
 
@@ -81,12 +111,6 @@ systemctl enable --now dnscrypt-proxy.service
 ````
 
 We can test timing and caching with `time getent hosts google.com`.
-
-## WiFi wireless-regdb
-
-Configure the wireless regulation domain:
-
-`/etc/conf.d/wireless-regdom`
 
 ---
 

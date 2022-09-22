@@ -24,7 +24,7 @@ timedatectl set-ntp true
 
 ## Pacman settings
 
-Configure `/etc/pacman.conf` to enable `Color`, `CheckSpace`, `VerbosePkgLists`, and `ParallelDownloads = 5`.
+Configure `/etc/pacman.conf` to enable `Color`, `VerbosePkgLists`.
 
 Install `paccache`:
 
@@ -80,12 +80,12 @@ Target = *
 [Action]
 Description = Backing up database...
 When = PostTransaction
-Exec = /usr/bin/tar --create --zstd --file /root/pacman-backup.zstd.tar --directory / var/lib/pacman/local
+Exec = /usr/bin/tar --create --zstd --file /root/backups/pacman-db.zstd.tar --directory / var/lib/pacman/local
 ```
 
-(This would have saved my hide!)
+(NOTE: Space with directory / is essential)
 
-TODO: https://wiki.archlinux.org/title/Pacman/Tips_and_tricks#List_of_installed_packages
+(This would have saved my hide!)
 
 Optimise the `mirrorlist` mirrorlist using `reflector`: `pacmatic -S --needed reflector`.
 
@@ -107,7 +107,7 @@ Ignore new mirrorlist files:
 `/etc/pacman.conf`
 
 ```
-NoExtract = /etc/pacman.d/mirrorlist
+NoExtract = etc/pacman.d/mirrorlist
 ```
 
 ### Package Stats
@@ -136,7 +136,7 @@ Reduce the journal size because who really needs 4 GiB of logs?
 
 ```ini
 [Journal]
-SystemMaxUse=50M
+SystemMaxUse=100M
 ```
 
 ## doas
@@ -161,3 +161,16 @@ Some free space that can be deleted if ever necessary.
 truncate -s 500M /freespace
 touch -- /-i && chmod 0444 -- /-i
 ```
+
+## Power
+
+```
+powertop
+tlp
+--asdeps acpi_call
+```
+
+
+systemctl enable --now tlp.service
+
+Run powertop and look at tunables
