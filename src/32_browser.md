@@ -2,7 +2,7 @@
 
 It's unfortunate, but Firefox is all that's left... slowly dying...
 
-```terminal
+```sh
 pacmatic -S --needed firefox-i18n-en-gb
 ```
 

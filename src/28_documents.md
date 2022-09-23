@@ -2,19 +2,19 @@
 
 ## PDFs
 
-```terminal
+```sh
 pacmatic -S --needed zathura
 ```
 
 Plugin for PDF, ePub and OpenXPS (there are more plugins):
 
-```terminal
+```sh
 pacmatic -S --asdeps zathura-pdf-mupdf
 ```
 
 Set as default PDF reader:
 
-```terminal
+```sh
 xdg-mime default org.pwmt.zathura.desktop application/pdf
 ```
 
@@ -30,7 +30,7 @@ Note: `zathura` tracks history in `~/.local/share/zathura`.
 
 Use `pdftk`.
 
-```terminal
+```sh
 pacmatic -S --needed pdftk
 pacamtic -S --asdeps bcprov
 ```

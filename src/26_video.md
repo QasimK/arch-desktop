@@ -4,7 +4,7 @@ We'll want to configure `mpv` for optimal settings.
 
 ## Playback (mpv)
 
-```terminal
+```sh
 pacmatic -S --needed mpv youtube-dl
 pacmatic -S --needed --asdeps atomicparsley
 youtube-dl 'https://www.youtube.com/watch?v=LXb3EKWsInQ' -o 4k.webm

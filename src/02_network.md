@@ -1,21 +1,34 @@
 # Network
 
-Use iwd for wireless. `iwctl` cli.
+## WiFi
 
-## Special status IWD
-
-Setup iwd config to enable built-in DHCP.
-
+```sh
+pacmatic -S --needed iwd
+systemctl enable --now iwd.service
 ```
-vim /etc/iwd/main.conf.
 
+Use `iwctl` to connect to WiFi
+
+
+### WiFi wireless-regdb
+
+Uncomment the wireless regulation domain in `/etc/conf.d/wireless-regdom`.
+
+
+### Static Network
+
+Enable (static) network configuration:
+
+`/etc/iwd/main.conf`
+```ini
 [General]
 EnableNetworkConfiguration=true
 ```
 
-```
-vim /var/lib/iwd/spaceship.psk
+Configure your SSID:
 
+`/var/lib/iwd/spaceship.psk`
+```
 [IPv4]
 Address=192.168.1.10
 Netmask=255.255.255.0
@@ -23,24 +36,16 @@ Gateway=192.168.1.1
 Broadcast=192.168.1.255
 ```
 
-```
-/etc/resolv.conf
+Set the DNS server:
 
+`/etc/resolv.conf`
+```
 namesever 1.1.1.1
 ```
 
-But since it's a desktop, just assign a static one. We'll need to add a static route as well then.
+## Wired
 
-Note: static config is not saved across reboots. So don't actually do this :)
-
-## WiFi wireless-regdb
-
-Configure the wireless regulation domain:
-
-`/etc/conf.d/wireless-regdom`
-
-
-## Route
+### Route
 
 Static (not recommended):
 
@@ -49,7 +54,7 @@ ip route add 192.168.121.1 dev wlan0
 ip route add default via 192.168.121.1 dev wlan0
 ```
 
-## IP Address
+### IP Address
 
 Static (not recommended):
 
@@ -112,12 +117,6 @@ systemctl enable --now dnscrypt-proxy.service
 
 We can test timing and caching with `time getent hosts google.com`.
 
----
-
-systemd-resolved and systemd-networkd
-
-* Configuration inside /etc/systemd/networkd
-* Use `networkctl` to view
 
 ## Wireguard (personal vpn)
 
@@ -128,6 +127,7 @@ Server setup:
 ```sh
 systemctl enable --now wgquick@...
 ```
+
 
 ## Samba Mounts
 
@@ -150,6 +150,7 @@ Type=cifs
 Options=rw,file_mode=0640,dir_mode=0750,uid=me,gid=me,credentials=/etc/mnt-myserver.credentials
 TimeoutSec=5s
 ```
+
 
 Example automount file:
 

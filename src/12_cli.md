@@ -6,19 +6,19 @@ The CLI tools are an excellent complement to a GUI.
 
 Use `dash` for scripts because it has a faster start up time (1.5ms vs 3ms for bash).
 
-```terminal
+```sh
 pacmatic -S --needed dash
 ```
 
 Use `shellcheck` to check scripts for errors.
 
-```terminal
+```sh
 pacmatic -S --needed shellcheck
 ```
 
 Use `checkbashisms` to check for `sh` vs `bash` peculiarities:
 
-```terminal
+```sh
 pacmatic -S --needed checkbashisms
 ```
 
@@ -26,7 +26,7 @@ pacmatic -S --needed checkbashisms
 
 I have found `swaylock` to actually be surprisingly unreliable. Instead use `physlock`:
 
-```terminal
+```sh
 pacmatic -S --needed physlock
 ```
 

@@ -2,7 +2,7 @@
 
 ## Intel
 
-```terminal
+```sh
 pacmatic -S --needed mesa vulkan-intel intel-media-driver
 ```
 
@@ -12,7 +12,7 @@ This will vary depending on your GPU manufacturer.
 
 Hardware acceleration for videos etc.
 
-```terminal
+```sh
 pacmatic -S --needed mesa vulkan-radeon libva-mesa-driver mesa-vdpau
 ```
 
@@ -24,18 +24,18 @@ Ref: <https://wiki.archlinux.org/title/Hardware_video_acceleration#ATI/AMD>
 
 ## Test
 
-```terminal
+```sh
 pacmatic -S --needed vulkan-tools
 ```
 
-```terminal
+```sh
 vulkaninfo
 ```
 
-```terminal
+```sh
 pacmatic -S --needed lib-va-utils
 ```
 
-```terminal
+```sh
 vainfo
 ```

@@ -30,7 +30,7 @@ This is necessary because the default index (for "speakers" below will change on
 
 See microphone properties (for the right `card2`) with:
 
-```terminal
+```sh
 cat /proc/asound/card2/stream0
 ```
 
@@ -57,7 +57,7 @@ Record a sound with `arecord -D mic -f S16_LE -r 48000 -c 1 record.wav`.
 
 See speaker properties (for the right `card1`) with:
 
-```terminal
+```sh
 cat /proc/asound/card1/codec\#0
 ```
 
@@ -89,6 +89,6 @@ SEE: <https://wiki.archlinux.org/title/Advanced_Linux_Sound_Architecture/Trouble
 
 Sending notifications
 
-```terminal
+```sh
 notify-send -h STRING:synchronous:1 -h STRING:transient:1 -h INT:value:2 -u low -t 3000 -c device 'Volume'
 ```

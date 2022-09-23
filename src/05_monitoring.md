@@ -1,0 +1,51 @@
+# Monitoring
+
+## Monitoring Tools
+
+### SMART
+
+TODO: Be smart and write this section.
+
+
+### htop
+
+Monitor CPU + MEM + DISK + NET.
+
+
+### Intel GPU
+
+```sh
+pacmatic -S --needed intel-gpu-tools
+
+intel_gpu_top
+```
+
+
+### AMD GPU
+
+Use `radeontop`.
+
+
+### Power & Battery
+
+```sh
+tlp-stat -b
+```
+
+
+## Controlling Resource usage
+
+Use `cpulimit` to limit cpu core usage of a process.
+
+Use `nice` and `ionice` to adjust cpu and io priority of a process.
+
+
+## Stress Testing
+
+### CPU
+
+```sh
+pacmatic -S --needed stress
+
+stress --cpu 12 --timeout 60
+```
