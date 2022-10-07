@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Page not found - Arch Desktop</title>
-        <base href="/">
+        <title>Notes on Storage - Arch Desktop</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="Installation of Arch Linux on a Computer">
@@ -76,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="00_introduction.html">Introduction</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">System</li><li class="chapter-item expanded "><a href="01_installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="02_network.html"><strong aria-hidden="true">2.</strong> Network</a></li><li class="chapter-item expanded "><a href="03_system.html"><strong aria-hidden="true">3.</strong> System</a></li><li class="chapter-item expanded "><a href="04_security.html"><strong aria-hidden="true">4.</strong> Security</a></li><li class="chapter-item expanded "><a href="05_monitoring.html"><strong aria-hidden="true">5.</strong> Monitoring</a></li><li class="chapter-item expanded "><a href="06_aur.html"><strong aria-hidden="true">6.</strong> AUR</a></li><li class="chapter-item expanded affix "><li class="part-title">User CLI</li><li class="chapter-item expanded affix "><li class="part-title">User GUI</li><li class="chapter-item expanded affix "><li class="part-title">Apps</li><li class="chapter-item expanded affix "><li class="part-title">Coding</li><li class="chapter-item expanded affix "><li class="part-title">Appendix</li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="97_framework.html">Framework Laptop</a></li><li class="chapter-item expanded affix "><a href="98_storage_notes.html">Notes on Storage</a></li><li class="chapter-item expanded affix "><a href="99_windows.html">Dual-booting Windows</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="00_introduction.html">Introduction</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">System</li><li class="chapter-item expanded "><a href="01_installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="02_network.html"><strong aria-hidden="true">2.</strong> Network</a></li><li class="chapter-item expanded "><a href="03_system.html"><strong aria-hidden="true">3.</strong> System</a></li><li class="chapter-item expanded "><a href="04_security.html"><strong aria-hidden="true">4.</strong> Security</a></li><li class="chapter-item expanded "><a href="05_monitoring.html"><strong aria-hidden="true">5.</strong> Monitoring</a></li><li class="chapter-item expanded "><a href="06_aur.html"><strong aria-hidden="true">6.</strong> AUR</a></li><li class="chapter-item expanded affix "><li class="part-title">User CLI</li><li class="chapter-item expanded affix "><li class="part-title">User GUI</li><li class="chapter-item expanded affix "><li class="part-title">Apps</li><li class="chapter-item expanded affix "><li class="part-title">Coding</li><li class="chapter-item expanded affix "><li class="part-title">Appendix</li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="97_framework.html">Framework Laptop</a></li><li class="chapter-item expanded affix "><a href="98_storage_notes.html" class="active">Notes on Storage</a></li><li class="chapter-item expanded affix "><a href="99_windows.html">Dual-booting Windows</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -135,19 +134,87 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="document-not-found-404"><a class="header" href="#document-not-found-404">Document not found (404)</a></h1>
-<p>This URL is invalid, sorry. Please use the navigation bar or search to continue.</p>
+                        <h1 id="storage"><a class="header" href="#storage">Storage</a></h1>
+<p>Use a single disk with ext4 because anything else invites bikeshedding and problems.</p>
+<p>We'll have to complement this ourselves with:</p>
+<ul>
+<li>Regular backups to avoid data loss</li>
+<li>Encryption to avoid theft and fraud</li>
+<li>Checksums to avoid bitrot and tampering</li>
+</ul>
+<p>We miss out on:</p>
+<ol>
+<li>Snapshots</li>
+<li>Snapshot send/receive for ultra-fast backups (à la <code>btrfs</code>)</li>
+<li>File Compression</li>
+</ol>
+<p>The remaining page discusses alternatives.</p>
+<h2 id="self-encrypting-drives"><a class="header" href="#self-encrypting-drives">Self-encrypting drives</a></h2>
+<p>It's possible to use <a href="https://github.com/Drive-Trust-Alliance/sedutil/">sedutil</a>, but:</p>
+<ol>
+<li>Sleep mode seems to be dubious.</li>
+<li>The firmware may be dubious.</li>
+</ol>
+<p>It's also possible to use hdparm for a non-boot drive.</p>
+<ol>
+<li>https://wiki.archlinux.org/title/Solid_state_drive/Memory_cell_clearing#Step_2_-_Enable_security_by_setting_a_user_password</li>
+<li>https://www.pugetsystems.com/labs/articles/Introduction-to-Self-Encrypting-Drives-SED-557/</li>
+<li>https://unix.stackexchange.com/questions/481564/sedutils-vs-hpdarm-for-sed-hard-disks</li>
+</ol>
+<p>But this does not seem to be well-documented elsewhere.</p>
+<h2 id="tiered-storage"><a class="header" href="#tiered-storage">Tiered storage</a></h2>
+<p>It's oh-so-very tempting to want tiered storage or caching with super-fast SSDs, but honestly, spend a little more money to not have this additional complexity.</p>
+<p>For a NAS, it's a different story.</p>
+<h2 id="mdadm"><a class="header" href="#mdadm">mdadm</a></h2>
+<p>RAID1 can be useful to reduce downtime, and data loss between backups. Go for it, bearing in mind the cost.</p>
+<h2 id="dm-integrity"><a class="header" href="#dm-integrity">dm-integrity</a></h2>
+<p>Used with dm-crypt to detect bitrot.</p>
+<p>The maximum speed of dm-integrity is on the order of ~100 MB/s on an NVMe drive that is capable of ~7 GB/s.</p>
+<p>Therefore, this is a dead-end which is truly unfortunate.</p>
+<p>(Also, discard is not supported.)</p>
+<p>I ran a couple of benchmarks comparing encryption only with encryption and integrity.</p>
+<p>PCIe 4.0 NVMe:</p>
+<ul>
+<li>1.7 GB/s write with dm-crypt only, 374 MB/s with both (4.5x slower).</li>
+</ul>
+<p>SATA SSD:</p>
+<ul>
+<li>440 MB/s write with dm-crypt only, 179 MB/s with both (2.5x slower).</li>
+</ul>
+<p>To automatically recover from bitrot, you will need RAID. You can always restore files from a backup.</p>
+<h2 id="lvm"><a class="header" href="#lvm">LVM</a></h2>
+<p>LVM can be incredibly useful:</p>
+<ol>
+<li>Suddenly creating a new partition to install another OS.</li>
+<li>Creating a emergency, temporary snapshot (but, apparently LVM is not great for this).</li>
+<li>Transparently increasing storage by adding more disks.</li>
+</ol>
+<p>However, the risk of the storage array failing increases with every disk. RAID must be used to prevent this.</p>
+<h2 id="bcachefs"><a class="header" href="#bcachefs">bcachefs</a></h2>
+<p>The ideal solution would be <a href="https://bcachefs.org/">bcachefs</a> but it is far, far from feature-complete and battle-hardened.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="97_framework.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="99_windows.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
                         <div style="clear: both"></div>
                     </nav>
                 </div>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="97_framework.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="99_windows.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>

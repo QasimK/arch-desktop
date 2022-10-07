@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Page not found - Arch Desktop</title>
-        <base href="/">
+        <title>Installation - Arch Desktop</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="Installation of Arch Linux on a Computer">
@@ -76,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="00_introduction.html">Introduction</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">System</li><li class="chapter-item expanded "><a href="01_installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="02_network.html"><strong aria-hidden="true">2.</strong> Network</a></li><li class="chapter-item expanded "><a href="03_system.html"><strong aria-hidden="true">3.</strong> System</a></li><li class="chapter-item expanded "><a href="04_security.html"><strong aria-hidden="true">4.</strong> Security</a></li><li class="chapter-item expanded "><a href="05_monitoring.html"><strong aria-hidden="true">5.</strong> Monitoring</a></li><li class="chapter-item expanded "><a href="06_aur.html"><strong aria-hidden="true">6.</strong> AUR</a></li><li class="chapter-item expanded affix "><li class="part-title">User CLI</li><li class="chapter-item expanded affix "><li class="part-title">User GUI</li><li class="chapter-item expanded affix "><li class="part-title">Apps</li><li class="chapter-item expanded affix "><li class="part-title">Coding</li><li class="chapter-item expanded affix "><li class="part-title">Appendix</li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="97_framework.html">Framework Laptop</a></li><li class="chapter-item expanded affix "><a href="98_storage_notes.html">Notes on Storage</a></li><li class="chapter-item expanded affix "><a href="99_windows.html">Dual-booting Windows</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="00_introduction.html">Introduction</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">System</li><li class="chapter-item expanded "><a href="01_installation.html" class="active"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="02_network.html"><strong aria-hidden="true">2.</strong> Network</a></li><li class="chapter-item expanded "><a href="03_system.html"><strong aria-hidden="true">3.</strong> System</a></li><li class="chapter-item expanded "><a href="04_security.html"><strong aria-hidden="true">4.</strong> Security</a></li><li class="chapter-item expanded "><a href="05_monitoring.html"><strong aria-hidden="true">5.</strong> Monitoring</a></li><li class="chapter-item expanded "><a href="06_aur.html"><strong aria-hidden="true">6.</strong> AUR</a></li><li class="chapter-item expanded affix "><li class="part-title">User CLI</li><li class="chapter-item expanded affix "><li class="part-title">User GUI</li><li class="chapter-item expanded affix "><li class="part-title">Apps</li><li class="chapter-item expanded affix "><li class="part-title">Coding</li><li class="chapter-item expanded affix "><li class="part-title">Appendix</li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="97_framework.html">Framework Laptop</a></li><li class="chapter-item expanded affix "><a href="98_storage_notes.html">Notes on Storage</a></li><li class="chapter-item expanded affix "><a href="99_windows.html">Dual-booting Windows</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -135,19 +134,127 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="document-not-found-404"><a class="header" href="#document-not-found-404">Document not found (404)</a></h1>
-<p>This URL is invalid, sorry. Please use the navigation bar or search to continue.</p>
+                        <h1 id="installation"><a class="header" href="#installation">Installation</a></h1>
+<p>Follow the <a href="https://wiki.archlinux.org/title/Installation_guide">Arch Wiki</a> using the specific commands below.</p>
+<p>Consider using <a href="https://www.ventoy.net/en/index.html">Ventoy</a> to <em>easily</em> create a bootable USB drive.</p>
+<p>Detailed storage commands: <a href="https://qasimk.io/2020/borg-backup/">https://qasimk.io/2020/borg-backup/</a></p>
+<p>The below just lists differences to the Arch installation guide.</p>
+<h2 id="partitions"><a class="header" href="#partitions">Partitions</a></h2>
+<ul>
+<li>Use <code>fdisk</code> expert mode to set partition labels</li>
+<li>256MiB is sufficient for the EFI partition</li>
+<li>Don't bother with a swap partition.</li>
+<li>(Set <code>Linux LUKS</code> as the partition type for encrypted partitions)</li>
+</ul>
+<h2 id="cryptsetup"><a class="header" href="#cryptsetup">cryptsetup</a></h2>
+<p>This is not recommended — use a self-encrypting drive.</p>
+<h2 id="filesystems"><a class="header" href="#filesystems">Filesystems</a></h2>
+<pre><code class="language-sh">mkfs.ext4 -v -L root -T huge -m 1 -O encrypt /dev/nvme0n1p1
+</code></pre>
+<ul>
+<li><code>huge</code> is one inode per 64k; the default is one per 16k</li>
+<li>reserve 1% for root (this helps SSDs anyway)</li>
+<li><code>encrypt</code> is used for <code>fscrypt</code></li>
+</ul>
+<p>When mounting:</p>
+<pre><code class="language-sh">mount -o noatime,lazytime /dev/nvme0n1p2 /mnt
+mount -o noatime,lazytime /dev/nvme0n1pi /mnt/efi
+</code></pre>
+<p>(Do not use <code>relatime</code>.)</p>
+<h2 id="pacstrap--arch-chroot"><a class="header" href="#pacstrap--arch-chroot">pacstrap + arch-chroot</a></h2>
+<p>These are essential packages!</p>
+<pre><code class="language-sh">pacstrap /mnt base linux linux-zen linux-lts intel-ucode efibootmgr \
+    man-db man-pages texinfo vim tmux htop fish iwd python pacmatic
+</code></pre>
+<p>After <code>arch-chroot</code>, install optional dependencies:</p>
+<pre><code class="language-sh">pacman -S --needed --asdeps linux-firmware    # linux
+pacman -S --needed --asdeps wireless-regdb    # iwd
+pacman -S --needed --asdeps pkgfile           # fish
+pacman -S --needed --asdeps python-html2text  # pacmatic
+pacman -S --needed --asdeps lm_sensors lsof   # htop
+</code></pre>
+<h2 id="boot-loader"><a class="header" href="#boot-loader">Boot Loader</a></h2>
+<p>Remove an unnecessary present:</p>
+<pre><code class="language-sh">truncate /etc/mkinitcpio.d/linux-lts.preset
+</code></pre>
+<p>Generate unified kernel images:</p>
+<p><code>/etc/mkinitcpio.d/linux.preset</code></p>
+<pre><code>ALL_config=&quot;/etc/mkinitcpio.conf&quot;
+ALL_microcode=&quot;/boot/intel-ucode.img&quot;
+
+PRESETS=('default' 'fallback')
+
+default_kver=&quot;/boot/vmlinuz-linux&quot;
+default_image=&quot;/boot/initramfs-linux.img&quot;
+default_efi_image=&quot;/efi/archlinux.efi&quot;
+# default_options=&quot;&quot;
+
+fallback_kver=&quot;/boot/vmlinuz-linux-lts&quot;
+fallback_image=&quot;/boot/initramfs-linux-lts-fallback.img&quot;
+fallback_efi_image=&quot;/efi/EFI/boot/bootx64.efi&quot;
+fallback_options=&quot;-S autodetect&quot;
+</code></pre>
+<p>Set the kernel parameters:</p>
+<p><code>/etc/kernel/cmdline</code>:</p>
+<pre><code>rw quiet bgrt_disable root=/dev/nvme0n1p2
+</code></pre>
+<ul>
+<li><code>quiet</code> stops printing log messages</li>
+<li><code>bgrt_disable</code> hides the OEM splash image</li>
+</ul>
+<p>Create a script <code>efiboot.sh</code>:</p>
+<pre><code class="language-sh">#!/bin/bash
+# Create boot entries
+# List: efibootmgr
+# Delete: efibootmgr -Bb xxxx
+# Reorder: efibootmgr -o xxxx,yyyy
+set -euo pipefail
+
+efibootmgr \
+    --verbose \
+    --create \
+    --disk /dev/nvme0n1 \
+    --part 1 \
+    --label &quot;Arch Linux&quot; \
+    --loader /archlinux.efi \
+    --unicode
+</code></pre>
+<p>Modify the default config:</p>
+<p><code>/etc/mkinitcpio.conf</code></p>
+<pre><code>COMPRESSION=&quot;cat&quot;
+</code></pre>
+<ul>
+<li><code>cat</code> reduces the load time because NVME drives are blazing-fast now.</li>
+</ul>
+<p>Finally, re-generate the boot images:</p>
+<pre><code class="language-sh">mkinitcpio -P
+</code></pre>
+<p>You may also want to reorder the boot order and set a timeout.</p>
+<p>TODO: How to skip using <code>mkinitcpio</code>?
+TODO: Splash image</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="00_introduction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="02_network.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
                         <div style="clear: both"></div>
                     </nav>
                 </div>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="00_introduction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="02_network.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>

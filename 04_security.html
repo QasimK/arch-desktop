@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Page not found - Arch Desktop</title>
-        <base href="/">
+        <title>Security - Arch Desktop</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="Installation of Arch Linux on a Computer">
@@ -76,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="00_introduction.html">Introduction</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">System</li><li class="chapter-item expanded "><a href="01_installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="02_network.html"><strong aria-hidden="true">2.</strong> Network</a></li><li class="chapter-item expanded "><a href="03_system.html"><strong aria-hidden="true">3.</strong> System</a></li><li class="chapter-item expanded "><a href="04_security.html"><strong aria-hidden="true">4.</strong> Security</a></li><li class="chapter-item expanded "><a href="05_monitoring.html"><strong aria-hidden="true">5.</strong> Monitoring</a></li><li class="chapter-item expanded "><a href="06_aur.html"><strong aria-hidden="true">6.</strong> AUR</a></li><li class="chapter-item expanded affix "><li class="part-title">User CLI</li><li class="chapter-item expanded affix "><li class="part-title">User GUI</li><li class="chapter-item expanded affix "><li class="part-title">Apps</li><li class="chapter-item expanded affix "><li class="part-title">Coding</li><li class="chapter-item expanded affix "><li class="part-title">Appendix</li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="97_framework.html">Framework Laptop</a></li><li class="chapter-item expanded affix "><a href="98_storage_notes.html">Notes on Storage</a></li><li class="chapter-item expanded affix "><a href="99_windows.html">Dual-booting Windows</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="00_introduction.html">Introduction</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">System</li><li class="chapter-item expanded "><a href="01_installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="02_network.html"><strong aria-hidden="true">2.</strong> Network</a></li><li class="chapter-item expanded "><a href="03_system.html"><strong aria-hidden="true">3.</strong> System</a></li><li class="chapter-item expanded "><a href="04_security.html" class="active"><strong aria-hidden="true">4.</strong> Security</a></li><li class="chapter-item expanded "><a href="05_monitoring.html"><strong aria-hidden="true">5.</strong> Monitoring</a></li><li class="chapter-item expanded "><a href="06_aur.html"><strong aria-hidden="true">6.</strong> AUR</a></li><li class="chapter-item expanded affix "><li class="part-title">User CLI</li><li class="chapter-item expanded affix "><li class="part-title">User GUI</li><li class="chapter-item expanded affix "><li class="part-title">Apps</li><li class="chapter-item expanded affix "><li class="part-title">Coding</li><li class="chapter-item expanded affix "><li class="part-title">Appendix</li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="97_framework.html">Framework Laptop</a></li><li class="chapter-item expanded affix "><a href="98_storage_notes.html">Notes on Storage</a></li><li class="chapter-item expanded affix "><a href="99_windows.html">Dual-booting Windows</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -135,19 +134,92 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="document-not-found-404"><a class="header" href="#document-not-found-404">Document not found (404)</a></h1>
-<p>This URL is invalid, sorry. Please use the navigation bar or search to continue.</p>
+                        <h1 id="security-settings"><a class="header" href="#security-settings">Security settings</a></h1>
+<p>There are various security settings that can be done. These are all optional.</p>
+<p><a href="https://wiki.archlinux.org/title/Security">https://wiki.archlinux.org/title/Security</a></p>
+<p>This XKCD is extremely relevant <a href="https://xkcd.com/1200/">https://xkcd.com/1200/</a>.</p>
+<h2 id="umask"><a class="header" href="#umask">umask</a></h2>
+<p>As described in <code>man pam_umask</code>, set the global umask for all logins:</p>
+<p><code>/etc/pam.d/login</code></p>
+<pre><code>session optional pam_umask.so
+</code></pre>
+<p>Override the default umask:</p>
+<p><code>/etc/login.defs</code></p>
+<pre><code>UMASK       027
+</code></pre>
+<p><strong>Remove</strong> <code>umask=</code> line in <code>/etc/profile</code>.</p>
+<p>Further, systemd wants to be special:</p>
+<p><code>/etc/systemd/system/user@1000.service.d/override.conf</code></p>
+<pre><code class="language-ini">[Service]
+UMask=0027
+</code></pre>
+<h2 id="restrict-logins-to-specific-accounts"><a class="header" href="#restrict-logins-to-specific-accounts">Restrict logins to specific accounts</a></h2>
+<p><code>/etc/security/access.d/access.conf</code></p>
+<pre><code># Only allow local logins for root
++:root:LOCAL
+
+# Allow me to login from anywhere
++:me:ALL
+
+# Disallow anyone else from logging in from anywhere
+-:ALL:ALL
+</code></pre>
+<h2 id="sysctl"><a class="header" href="#sysctl">sysctl</a></h2>
+<p><code>/etc/sysctl.d/00-harden.conf</code></p>
+<pre><code class="language-ini"># Restrict ptrace to root
+kernel.yama.ptrace_scope = 2
+
+# Restrict replacing current kernel
+kernel.kexec_load_disabled = 1
+
+# Prevent spraying attacks from non-privileged code
+net.core.bpf_jit_harden = 1
+
+# Disable IPv6 to prevent VPN leaks
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+</code></pre>
+<h2 id="lockdown-mode"><a class="header" href="#lockdown-mode">Lockdown Mode</a></h2>
+<p><strong>If NOT using hibernation:</strong> enable lockdown mode.</p>
+<h2 id="resource-limits"><a class="header" href="#resource-limits">Resource limits</a></h2>
+<p>The Arch wiki describes many useful limits.</p>
+<p><a href="https://wiki.archlinux.org/title/Limits.conf">https://wiki.archlinux.org/title/Limits.conf</a></p>
+<p><code>/etc/security/limits.d/limits.conf</code></p>
+<pre><code>*           soft    core       0           # Prevent corefiles from being generated by default
+*           hard    core       unlimited   # Allow corefiles to be temporarily enabled with ulimit -c unlimited
+
+*           hard    nice       -19         # Prevent non-root users from running a process at minimal niceness
+root        hard    nice       -20         # Allows root to run a process when system is unresponsive
+
+*           soft    nofile     100000      # Increase the default max number of files because it is useful
+*           hard    nofile     1048576     # Increase the max from 2^19 to the max-max of 2^20
+
+*           hard    nproc      1000        # Prevent fork-bombs from taking out the system
+root        hard    nproc      10000       # Prevent root from not being able to launch enough processes
+</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="03_system.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="05_monitoring.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
                         <div style="clear: both"></div>
                     </nav>
                 </div>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="03_system.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="05_monitoring.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>

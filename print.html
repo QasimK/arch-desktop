@@ -7,7 +7,7 @@
         <meta name="robots" content="noindex" />
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Installation of Arch Linux on a Desktop">
+        <meta name="description" content="Installation of Arch Linux on a Computer">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
@@ -76,7 +76,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="01_introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="02_storage.html"><strong aria-hidden="true">2.</strong> Storage</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="00_introduction.html">Introduction</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">System</li><li class="chapter-item expanded "><a href="01_installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="02_network.html"><strong aria-hidden="true">2.</strong> Network</a></li><li class="chapter-item expanded "><a href="03_system.html"><strong aria-hidden="true">3.</strong> System</a></li><li class="chapter-item expanded "><a href="04_security.html"><strong aria-hidden="true">4.</strong> Security</a></li><li class="chapter-item expanded "><a href="05_monitoring.html"><strong aria-hidden="true">5.</strong> Monitoring</a></li><li class="chapter-item expanded "><a href="06_aur.html"><strong aria-hidden="true">6.</strong> AUR</a></li><li class="chapter-item expanded affix "><li class="part-title">User CLI</li><li class="chapter-item expanded affix "><li class="part-title">User GUI</li><li class="chapter-item expanded affix "><li class="part-title">Apps</li><li class="chapter-item expanded affix "><li class="part-title">Coding</li><li class="chapter-item expanded affix "><li class="part-title">Appendix</li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="97_framework.html">Framework Laptop</a></li><li class="chapter-item expanded affix "><a href="98_storage_notes.html">Notes on Storage</a></li><li class="chapter-item expanded affix "><a href="99_windows.html">Dual-booting Windows</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -146,9 +146,10 @@
 <ul>
 <li>0x (system setup)</li>
 <li>1y (user CLI)</li>
-<li>2z (user GUI)</li>
+<li>2z (desktop)</li>
 <li>3a (apps)</li>
 <li>4b (coding)</li>
+<li>9c (appendix)</li>
 </ul>
 <p>Note: <code>me</code> will refer to our main user account.</p>
 <h2 id="hardware"><a class="header" href="#hardware">Hardware</a></h2>
@@ -158,6 +159,473 @@
 <li>Intel or AMD GPU because <a href="https://github.com/swaywm/sway/issues/490">Nvidia does not support the standard GBM interface</a></li>
 <li>External drives or cloud storage for backups</li>
 </ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="installation"><a class="header" href="#installation">Installation</a></h1>
+<p>Follow the <a href="https://wiki.archlinux.org/title/Installation_guide">Arch Wiki</a> using the specific commands below.</p>
+<p>Consider using <a href="https://www.ventoy.net/en/index.html">Ventoy</a> to <em>easily</em> create a bootable USB drive.</p>
+<p>Detailed storage commands: <a href="https://qasimk.io/2020/borg-backup/">https://qasimk.io/2020/borg-backup/</a></p>
+<p>The below just lists differences to the Arch installation guide.</p>
+<h2 id="partitions"><a class="header" href="#partitions">Partitions</a></h2>
+<ul>
+<li>Use <code>fdisk</code> expert mode to set partition labels</li>
+<li>256MiB is sufficient for the EFI partition</li>
+<li>Don't bother with a swap partition.</li>
+<li>(Set <code>Linux LUKS</code> as the partition type for encrypted partitions)</li>
+</ul>
+<h2 id="cryptsetup"><a class="header" href="#cryptsetup">cryptsetup</a></h2>
+<p>This is not recommended — use a self-encrypting drive.</p>
+<h2 id="filesystems"><a class="header" href="#filesystems">Filesystems</a></h2>
+<pre><code class="language-sh">mkfs.ext4 -v -L root -T huge -m 1 -O encrypt /dev/nvme0n1p1
+</code></pre>
+<ul>
+<li><code>huge</code> is one inode per 64k; the default is one per 16k</li>
+<li>reserve 1% for root (this helps SSDs anyway)</li>
+<li><code>encrypt</code> is used for <code>fscrypt</code></li>
+</ul>
+<p>When mounting:</p>
+<pre><code class="language-sh">mount -o noatime,lazytime /dev/nvme0n1p2 /mnt
+mount -o noatime,lazytime /dev/nvme0n1pi /mnt/efi
+</code></pre>
+<p>(Do not use <code>relatime</code>.)</p>
+<h2 id="pacstrap--arch-chroot"><a class="header" href="#pacstrap--arch-chroot">pacstrap + arch-chroot</a></h2>
+<p>These are essential packages!</p>
+<pre><code class="language-sh">pacstrap /mnt base linux linux-zen linux-lts intel-ucode efibootmgr \
+    man-db man-pages texinfo vim tmux htop fish iwd python pacmatic
+</code></pre>
+<p>After <code>arch-chroot</code>, install optional dependencies:</p>
+<pre><code class="language-sh">pacman -S --needed --asdeps linux-firmware    # linux
+pacman -S --needed --asdeps wireless-regdb    # iwd
+pacman -S --needed --asdeps pkgfile           # fish
+pacman -S --needed --asdeps python-html2text  # pacmatic
+pacman -S --needed --asdeps lm_sensors lsof   # htop
+</code></pre>
+<h2 id="boot-loader"><a class="header" href="#boot-loader">Boot Loader</a></h2>
+<p>Remove an unnecessary present:</p>
+<pre><code class="language-sh">truncate /etc/mkinitcpio.d/linux-lts.preset
+</code></pre>
+<p>Generate unified kernel images:</p>
+<p><code>/etc/mkinitcpio.d/linux.preset</code></p>
+<pre><code>ALL_config=&quot;/etc/mkinitcpio.conf&quot;
+ALL_microcode=&quot;/boot/intel-ucode.img&quot;
+
+PRESETS=('default' 'fallback')
+
+default_kver=&quot;/boot/vmlinuz-linux&quot;
+default_image=&quot;/boot/initramfs-linux.img&quot;
+default_efi_image=&quot;/efi/archlinux.efi&quot;
+# default_options=&quot;&quot;
+
+fallback_kver=&quot;/boot/vmlinuz-linux-lts&quot;
+fallback_image=&quot;/boot/initramfs-linux-lts-fallback.img&quot;
+fallback_efi_image=&quot;/efi/EFI/boot/bootx64.efi&quot;
+fallback_options=&quot;-S autodetect&quot;
+</code></pre>
+<p>Set the kernel parameters:</p>
+<p><code>/etc/kernel/cmdline</code>:</p>
+<pre><code>rw quiet bgrt_disable root=/dev/nvme0n1p2
+</code></pre>
+<ul>
+<li><code>quiet</code> stops printing log messages</li>
+<li><code>bgrt_disable</code> hides the OEM splash image</li>
+</ul>
+<p>Create a script <code>efiboot.sh</code>:</p>
+<pre><code class="language-sh">#!/bin/bash
+# Create boot entries
+# List: efibootmgr
+# Delete: efibootmgr -Bb xxxx
+# Reorder: efibootmgr -o xxxx,yyyy
+set -euo pipefail
+
+efibootmgr \
+    --verbose \
+    --create \
+    --disk /dev/nvme0n1 \
+    --part 1 \
+    --label &quot;Arch Linux&quot; \
+    --loader /archlinux.efi \
+    --unicode
+</code></pre>
+<p>Modify the default config:</p>
+<p><code>/etc/mkinitcpio.conf</code></p>
+<pre><code>COMPRESSION=&quot;cat&quot;
+</code></pre>
+<ul>
+<li><code>cat</code> reduces the load time because NVME drives are blazing-fast now.</li>
+</ul>
+<p>Finally, re-generate the boot images:</p>
+<pre><code class="language-sh">mkinitcpio -P
+</code></pre>
+<p>You may also want to reorder the boot order and set a timeout.</p>
+<p>TODO: How to skip using <code>mkinitcpio</code>?
+TODO: Splash image</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="network"><a class="header" href="#network">Network</a></h1>
+<h2 id="wifi"><a class="header" href="#wifi">WiFi</a></h2>
+<pre><code class="language-sh">pacman -S --asexplicit iwd
+systemctl enable --now iwd.service
+</code></pre>
+<p>Use <code>iwctl</code> to connect to WiFi</p>
+<h3 id="wifi-wireless-regdb"><a class="header" href="#wifi-wireless-regdb">WiFi wireless-regdb</a></h3>
+<p>Uncomment the wireless regulation domain in <code>/etc/conf.d/wireless-regdom</code>.</p>
+<h3 id="static-network"><a class="header" href="#static-network">Static Network</a></h3>
+<p>Enable (static) network configuration:</p>
+<p><code>/etc/iwd/main.conf</code></p>
+<pre><code class="language-ini">[General]
+EnableNetworkConfiguration=true
+</code></pre>
+<p>Configure your SSID:</p>
+<p><code>/var/lib/iwd/spaceship.psk</code></p>
+<pre><code>[IPv4]
+Address=192.168.1.10
+Netmask=255.255.255.0
+Gateway=192.168.1.1
+Broadcast=192.168.1.255
+</code></pre>
+<p>Set the DNS server:</p>
+<p><code>/etc/resolv.conf</code></p>
+<pre><code>namesever 1.1.1.1
+</code></pre>
+<h2 id="wired"><a class="header" href="#wired">Wired</a></h2>
+<h3 id="route"><a class="header" href="#route">Route</a></h3>
+<p>Static (not recommended):</p>
+<pre><code>ip route add 192.168.121.1 dev wlan0
+ip route add default via 192.168.121.1 dev wlan0
+</code></pre>
+<h3 id="ip-address"><a class="header" href="#ip-address">IP Address</a></h3>
+<p>Static (not recommended):</p>
+<pre><code>ip address add 192.168.121.2/32 broadcast + dev wlan0
+</code></pre>
+<h2 id="dns"><a class="header" href="#dns">DNS</a></h2>
+<p>We need to resolve domain names. A simple configuration like the following has problems.</p>
+<p><code>/etc/resolv.conf</code></p>
+<pre><code># LAN
+# nameserver=192.168.1.1
+
+# Cloudflare
+nameserver=1.1.1.1
+</code></pre>
+<ul>
+<li>DNS queries are not cached - every single lookup involves a network request.</li>
+<li>DNS queries have no privacy.</li>
+</ul>
+<p>Instead, use <code>dnscrypt-proxy</code>:</p>
+<pre><code class="language-sh">pacman -S --asexplicit dnscrypt-proxy
+</code></pre>
+<p>There are a number of options like DoH (DNS-over-HTTPS), oDoh (Oblivious DoH), or DNSCrypt. We will use oDOH.</p>
+<p><code>/etc/dnscrypt-proxy/dnscrypt-proxy.toml</code></p>
+<pre><code># Note: be sure to set other servers to false
+doh_servers = false
+odoh_servers = true
+
+# Filters
+block_ipv6 = true
+
+# Cache
+cache_size = 1000000
+cache_min_ttl = 3600
+
+# Servers - uncomment oDoH servers and relays
+# ...
+
+# Routes - following routes are not optimal, but it is quick to set up
+routes = [
+    { server_name=&quot;*&quot;, via=[*] }
+]
+skip_incompatible = true
+</code></pre>
+<pre><code class="language-sh">systemctl enable --now dnscrypt-proxy.service
+</code></pre>
+<p>We can test timing and caching with <code>time getent hosts google.com</code>.</p>
+<h2 id="wireguard-personal-vpn"><a class="header" href="#wireguard-personal-vpn">Wireguard (personal vpn)</a></h2>
+<p>Server setup:</p>
+<p><a href="https://qasimk.gitbooks.io/piserver-book/content/personal-vpn-wireguard.html">https://qasimk.gitbooks.io/piserver-book/content/personal-vpn-wireguard.html</a></p>
+<pre><code class="language-sh">systemctl enable --now wgquick@...
+</code></pre>
+<h2 id="samba-mounts"><a class="header" href="#samba-mounts">Samba Mounts</a></h2>
+<p>Certain mount options like <code>credentials</code> require <code>cifs-utils</code>:</p>
+<pre><code class="language-sh">pacman -S --asexplicit cifs-utils
+</code></pre>
+<p>Example mount file:</p>
+<pre><code class="language-ini">[Unit]
+Description=myserver/myshare
+
+[Mount]
+What=//192.168.1.100/MyShare
+Where=/mnt/myserver/myshare
+Type=cifs
+Options=rw,file_mode=0640,dir_mode=0750,uid=me,gid=me,credentials=/etc/mnt-myserver.credentials
+TimeoutSec=5s
+</code></pre>
+<p>Example automount file:</p>
+<pre><code class="language-ini">[Unit]
+Description=automount myserver/myshare
+
+[Automount]
+Where=/mnt/myserver/myshare
+TimeoutIdleSec=1m
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="post-installation-system-configuration"><a class="header" href="#post-installation-system-configuration">Post-installation System Configuration</a></h1>
+<p>Read kernel messages with <code>journalctl -b</code> — you will spot problems!</p>
+<h2 id="swap"><a class="header" href="#swap">Swap</a></h2>
+<p>I don't bother with it.</p>
+<h2 id="pacmatic-fix"><a class="header" href="#pacmatic-fix">Pacmatic Fix</a></h2>
+<p><strong>Note: you may need a temporary fix for <code>pacmatic</code></strong></p>
+<p><a href="https://github.com/keenerd/pacmatic/issues/41">https://github.com/keenerd/pacmatic/issues/41</a>
+<a href="https://github.com/keenerd/pacmatic/pull/42/files">https://github.com/keenerd/pacmatic/pull/42/files</a></p>
+<p>Or, alternatively set the environment variable <code>rss_feed=https://archlinux.org/feeds/news/</code>.</p>
+<h2 id="time-sync"><a class="header" href="#time-sync">Time sync</a></h2>
+<pre><code class="language-sh">systemctl enable --now systemd-timesyncd
+timedatectl set-ntp true
+</code></pre>
+<h2 id="pacman-settings"><a class="header" href="#pacman-settings">Pacman settings</a></h2>
+<p>Configure <code>/etc/pacman.conf</code> to enable <code>Color</code>, <code>VerbosePkgLists</code>, and <code>ParallelDownloads</code>.</p>
+<h3 id="backup-the-local-database"><a class="header" href="#backup-the-local-database">Backup the local database</a></h3>
+<p>Backup the local pacman database when it changes to facilitate restore:</p>
+<p><code>/etc/pacman.d/hooks/pacbackup.hook</code></p>
+<pre><code class="language-ini">[Trigger]
+Operation = Install
+Operation = Upgrade
+Operation = Remove
+Type = Package
+Target = *
+
+[Action]
+Description = Backing up database...
+When = PostTransaction
+Exec = /usr/bin/tar --create --zstd --file /root/backups/pacman-db.zstd.tar --directory / var/lib/pacman/local
+</code></pre>
+<p>(NOTE: Space at the start of <code>/ var/lib/pacman/local</code> is deliberate.)</p>
+<h3 id="clean-up-cached-files"><a class="header" href="#clean-up-cached-files">Clean-up cached files</a></h3>
+<p>Install <code>paccache</code>:</p>
+<pre><code class="language-sh">pacman -S --asexplicit pacman-contrib
+</code></pre>
+<p>Automatically remove all versions of an uninstalled package:</p>
+<p><code>/etc/pacman.d/hooks/paccache-remove.hook</code></p>
+<pre><code class="language-ini">[Trigger]
+Operation = Remove
+Type = Package
+Target = *
+
+[Action]
+Description = Removing package cache for uninstalled packages...
+When = PostTransaction
+Exec = /usr/bin/paccache -ruk0
+</code></pre>
+<p>Keep only the latest three versions of each installed package:</p>
+<p><code>/etc/pacman.d/hooks/paccache-upgrade.hook</code></p>
+<pre><code class="language-ini">[Trigger]
+Operation = Upgrade
+Type = Package
+Target = *
+
+[Action]
+Description = Removing old cached packages...
+When = PostTransaction
+Exec = /usr/bin/paccache -rk3
+</code></pre>
+<h3 id="reflector"><a class="header" href="#reflector">Reflector</a></h3>
+<p>Optimise the mirror list using <code>reflector</code>:</p>
+<pre><code class="language-sh">pacman -S --asexplicit reflector`.
+</code></pre>
+<p><code>/etc/xdg/reflector/reflector.conf</code></p>
+<pre><code class="language-txt">--save /etc/pacman.d/mirrorlist
+--protocol https
+--country 'United Kingdom'
+--latest 5
+--sort rate
+--ipv4
+</code></pre>
+<p>Enable the weekly timer <code>systemctl enable reflector.timer</code>.</p>
+<p>Ignore new mirrorlist files:</p>
+<p><code>/etc/pacman.conf</code></p>
+<pre><code class="language-ini">NoExtract = etc/pacman.d/mirrorlist
+</code></pre>
+<h3 id="ignore-common-pacnews"><a class="header" href="#ignore-common-pacnews">Ignore common pacnews</a></h3>
+<pre><code class="language-ini">NoExtract = etc/locale.gen
+</code></pre>
+<h2 id="trim"><a class="header" href="#trim">Trim</a></h2>
+<p>Enable weekly trim of filesystems.</p>
+<pre><code class="language-sh">systemctl enable --now fstrim.timer
+</code></pre>
+<h2 id="journald"><a class="header" href="#journald">Journald</a></h2>
+<p>Reduce the journal size because who really needs 4 GiB of logs?</p>
+<p><code>/etc/systemd/journald.conf.d/00-journal-size.conf</code></p>
+<pre><code class="language-ini">[Journal]
+SystemMaxUse=100M
+</code></pre>
+<h2 id="doas"><a class="header" href="#doas">doas</a></h2>
+<p>Use <code>doas</code> instead of <code>sudo</code> because it is simpler.</p>
+<pre><code class="language-sh">pacman -S --asexplicit opendoas
+</code></pre>
+<h2 id="ananicy"><a class="header" href="#ananicy">Ananicy</a></h2>
+<p>Unfortunately, this is AUR.</p>
+<h2 id="safety-features"><a class="header" href="#safety-features">Safety features</a></h2>
+<p>Some free space that can be deleted if ever necessary:</p>
+<pre><code class="language-sh">truncate -s 500M /freespace
+</code></pre>
+<p>Prevent <code>rm</code>'ing root:</p>
+<pre><code class="language-sh">touch -- /-i &amp;&amp; chmod 0444 -- /-i
+</code></pre>
+<h2 id="power-savings-laptop"><a class="header" href="#power-savings-laptop">Power-savings (Laptop)</a></h2>
+<h3 id="uefi"><a class="header" href="#uefi">UEFI</a></h3>
+<ul>
+<li>Disable unnecessary components: fingerprint reader, etc.</li>
+<li>Set a battery limit to preserve the longevity of the battery.</li>
+</ul>
+<h3 id="tlp"><a class="header" href="#tlp">TLP</a></h3>
+<p>The primary tool is <code>tlp</code>:</p>
+<pre><code class="language-sh">pacman -S --asexplicit tlp
+</code></pre>
+<pre><code class="language-sh">systemctl enable --now tlp.service
+</code></pre>
+<p>This will automatically configure the system between being plugged-in and running on battery. It's fire-and-forget.</p>
+<p>Use <code>tlp-stat -b</code> to see that state of the battery.</p>
+<p>This parameter helps with the Framework laptop:</p>
+<p><code>/etc/tlp.d/00-laptop.conf</code></p>
+<pre><code class="language-ini">PCIE_ASPM_ON_BAT=powersupersave
+</code></pre>
+<h3 id="kernel"><a class="header" href="#kernel">Kernel</a></h3>
+<p>These kernel parameters help with the Framework laptop:</p>
+<p><code>/etc/kernel/cmdline</code></p>
+<pre><code class="language-txt">i915.enable_fbc=1 nvme.noacpi=1
+</code></pre>
+<h3 id="cursor"><a class="header" href="#cursor">Cursor</a></h3>
+<p>Stop the cursor from blinking (yes, it makes a measurable difference!):</p>
+<p><code>/etc/tmpfiles.d/cursor_blink.conf</code></p>
+<pre><code class="language-txt">w /sys/class/graphics/fbcon/cursor_blink - - - - 0
+</code></pre>
+<h3 id="powertop"><a class="header" href="#powertop">Powertop</a></h3>
+<p>Unnecessary.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="security-settings"><a class="header" href="#security-settings">Security settings</a></h1>
+<p>There are various security settings that can be done. These are all optional.</p>
+<p><a href="https://wiki.archlinux.org/title/Security">https://wiki.archlinux.org/title/Security</a></p>
+<p>This XKCD is extremely relevant <a href="https://xkcd.com/1200/">https://xkcd.com/1200/</a>.</p>
+<h2 id="umask"><a class="header" href="#umask">umask</a></h2>
+<p>As described in <code>man pam_umask</code>, set the global umask for all logins:</p>
+<p><code>/etc/pam.d/login</code></p>
+<pre><code>session optional pam_umask.so
+</code></pre>
+<p>Override the default umask:</p>
+<p><code>/etc/login.defs</code></p>
+<pre><code>UMASK       027
+</code></pre>
+<p><strong>Remove</strong> <code>umask=</code> line in <code>/etc/profile</code>.</p>
+<p>Further, systemd wants to be special:</p>
+<p><code>/etc/systemd/system/user@1000.service.d/override.conf</code></p>
+<pre><code class="language-ini">[Service]
+UMask=0027
+</code></pre>
+<h2 id="restrict-logins-to-specific-accounts"><a class="header" href="#restrict-logins-to-specific-accounts">Restrict logins to specific accounts</a></h2>
+<p><code>/etc/security/access.d/access.conf</code></p>
+<pre><code># Only allow local logins for root
++:root:LOCAL
+
+# Allow me to login from anywhere
++:me:ALL
+
+# Disallow anyone else from logging in from anywhere
+-:ALL:ALL
+</code></pre>
+<h2 id="sysctl"><a class="header" href="#sysctl">sysctl</a></h2>
+<p><code>/etc/sysctl.d/00-harden.conf</code></p>
+<pre><code class="language-ini"># Restrict ptrace to root
+kernel.yama.ptrace_scope = 2
+
+# Restrict replacing current kernel
+kernel.kexec_load_disabled = 1
+
+# Prevent spraying attacks from non-privileged code
+net.core.bpf_jit_harden = 1
+
+# Disable IPv6 to prevent VPN leaks
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+</code></pre>
+<h2 id="lockdown-mode"><a class="header" href="#lockdown-mode">Lockdown Mode</a></h2>
+<p><strong>If NOT using hibernation:</strong> enable lockdown mode.</p>
+<h2 id="resource-limits"><a class="header" href="#resource-limits">Resource limits</a></h2>
+<p>The Arch wiki describes many useful limits.</p>
+<p><a href="https://wiki.archlinux.org/title/Limits.conf">https://wiki.archlinux.org/title/Limits.conf</a></p>
+<p><code>/etc/security/limits.d/limits.conf</code></p>
+<pre><code>*           soft    core       0           # Prevent corefiles from being generated by default
+*           hard    core       unlimited   # Allow corefiles to be temporarily enabled with ulimit -c unlimited
+
+*           hard    nice       -19         # Prevent non-root users from running a process at minimal niceness
+root        hard    nice       -20         # Allows root to run a process when system is unresponsive
+
+*           soft    nofile     100000      # Increase the default max number of files because it is useful
+*           hard    nofile     1048576     # Increase the max from 2^19 to the max-max of 2^20
+
+*           hard    nproc      1000        # Prevent fork-bombs from taking out the system
+root        hard    nproc      10000       # Prevent root from not being able to launch enough processes
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="monitoring"><a class="header" href="#monitoring">Monitoring</a></h1>
+<h2 id="monitoring-tools"><a class="header" href="#monitoring-tools">Monitoring Tools</a></h2>
+<h3 id="smart"><a class="header" href="#smart">SMART</a></h3>
+<p>TODO: Be smart and write this section.</p>
+<h3 id="htop"><a class="header" href="#htop">htop</a></h3>
+<p>Monitor CPU + MEM + DISK + NET.</p>
+<h3 id="intel-gpu"><a class="header" href="#intel-gpu">Intel GPU</a></h3>
+<pre><code class="language-sh">pacman -S --asexplicit intel-gpu-tools
+
+intel_gpu_top
+</code></pre>
+<h3 id="amd-gpu"><a class="header" href="#amd-gpu">AMD GPU</a></h3>
+<p>Use <code>radeontop</code>.</p>
+<h3 id="power--battery"><a class="header" href="#power--battery">Power &amp; Battery</a></h3>
+<pre><code class="language-sh">tlp-stat -b
+</code></pre>
+<h2 id="controlling-resource-usage"><a class="header" href="#controlling-resource-usage">Controlling Resource usage</a></h2>
+<p>Use <code>cpulimit</code> to limit cpu core usage of a process.</p>
+<p>Use <code>nice</code> and <code>ionice</code> to adjust cpu and io priority of a process.</p>
+<h2 id="stress-testing"><a class="header" href="#stress-testing">Stress Testing</a></h2>
+<h3 id="cpu"><a class="header" href="#cpu">CPU</a></h3>
+<pre><code class="language-sh">pacman -S --asexplicit stress
+
+stress --cpu 12 --timeout 60
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="aur"><a class="header" href="#aur">AUR</a></h1>
+<p>Don't bother with AUR tools unless you have so many packages.</p>
+<p>Use <a href="https://aur.archlinux.org/packages/paru/">https://aur.archlinux.org/packages/paru/</a>.</p>
+<p>Download the binary directly from GitHub and use it to install itself :)</p>
+<p>Install <code>binutils</code> for <code>strip</code>.</p>
+<p>Run <code>makepkg -sirc --sudo doas</code>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="framework-laptop"><a class="header" href="#framework-laptop">Framework Laptop</a></h1>
+<h2 id="hardware-1"><a class="header" href="#hardware-1">Hardware</a></h2>
+<ul>
+<li><strong>CPU</strong> Intel 12th Gen i5-1240p (4p+8e cores)</li>
+<li><strong>GPU</strong> iGP</li>
+<li><strong>RAM</strong> 2 x DDR4 SODIMM</li>
+<li><strong>Screen</strong> 13.5&quot; 3:2 2256x1504 px sRGB 400 nit</li>
+<li><strong>Storage</strong> M.2 2280</li>
+<li><strong>Battery</strong> 55Wh 15.4V 3572mAh; 80% capacity after 1000 cycles</li>
+<li><strong>Webcam</strong> 1080p 60fps with hardware kill-switch</li>
+<li><strong>Wireless</strong> Intel AX210 WiFi 6E and Bluetooth 5.2
+<ul>
+<li>Has problems...</li>
+</ul>
+</li>
+<li><strong>Speakers</strong> 2 x 2 W speakers with 5cc backvolume</li>
+<li><strong>Microphones</strong> Dual MEMS with hardware kill-switch</li>
+<li><strong>Keyboard</strong> 1.5mm key travel with backlight</li>
+<li><strong>Touchpad</strong> 115 x 77 mm</li>
+<li><strong>Size</strong> 297 x 229 x 15.9 mm</li>
+<li><strong>Weight</strong> 1.3 KG</li>
+<li><strong>Cooling</strong> 30 W continuous load</li>
+<li><strong>Ports</strong> 4 x USB-C (modules) + 3.5mm headset jack</li>
+</ul>
+<p>Pick your own RAM and SSD.</p>
+<h2 id="power-savings"><a class="header" href="#power-savings">Power Savings</a></h2>
+<p>The USB-A, microSD, HDMI modules all consume extra battery when plugged in.</p>
+<p>For power savings:</p>
+<p><code>/etc/tlp.d/00-laptop.conf</code></p>
+<pre><code class="language-ini">PCIE_ASPM_ON_BAT=powersupersave
+</code></pre>
+<p><code>/etc/kernel/cmdline</code></p>
+<pre><code class="language-txt">i915.enable_fbc=1 nvme.noacpi=1
+</code></pre>
+<p>In the UEFI disable the fingerprint reader.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="storage"><a class="header" href="#storage">Storage</a></h1>
 <p>Use a single disk with ext4 because anything else invites bikeshedding and problems.</p>
 <p>We'll have to complement this ourselves with:</p>
@@ -216,6 +684,19 @@
 <p>However, the risk of the storage array failing increases with every disk. RAID must be used to prevent this.</p>
 <h2 id="bcachefs"><a class="header" href="#bcachefs">bcachefs</a></h2>
 <p>The ideal solution would be <a href="https://bcachefs.org/">bcachefs</a> but it is far, far from feature-complete and battle-hardened.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="dual-boot-with-windows"><a class="header" href="#dual-boot-with-windows">Dual boot with Windows</a></h1>
+<p>Always use different disks - it's just easier.</p>
+<p>Use UEFI's boot menu to switch between the systems. There is no need to have a separate boot loader.</p>
+<p>Configure Windows to use UTC for UEFI clock:</p>
+<ol>
+<li>Disable internet updates in Window settings</li>
+<li>Use UTC for the UEFI clock by creating the file <code>fix.reg</code></li>
+</ol>
+<pre><code class="language-reg">Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\TimeZoneInformation]
+     &quot;RealTimeIsUniversal&quot;=hex(b):01,00,00,00,00,00,00,00
+</code></pre>
 
                     </main>
 
