@@ -29,7 +29,7 @@ Ref: <https://wiki.archlinux.org/title/Metric-compatible_fonts>
 
 ## Configuration
 
-`pacmatic -S --needed fontconfig`
+`pacman -S --asexplicit fontconfig`
 
 ```
 cd /etc/fonts/conf.d

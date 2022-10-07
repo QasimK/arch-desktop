@@ -1,10 +1,12 @@
-# Wayland/Sway
+# Wayland/Sway (Desktop\Environment)
 
 We are finally here.
 
 <https://arewewaylandyet.com/>
 
-`pacmatic -S --needed sway`
+```sh
+pacman -S --asexplicit sway
+```
 
 ## Start script
 
@@ -26,7 +28,27 @@ Run it with `exec ,sway`.
 
 `dbus-run-session` allows us to open multiple sways.
 
-TODO: `NO_AT_BRIDGE=1`? pam_environment vs script.
+### Disable Accessibility Services
+
+Stop the `at-spi-bus-launcher` process from starting (`firefox`):
+
+`.pam_environment`
+```
+# Disable accessibility service
+NO_AT_BRIDGE=1
+```
+
+`/etc/systemd/system/user@1000.service.d/override.conf`
+```
+[System]
+NO_AT_BRIDGE=1
+```
+
+`/etc/pacman.conf`
+```ini
+NoExtract = usr/share/dbus-1/accessibility-services/org.a11y.*
+NoExtract = usr/share/dbus-1/services/org.a11y.*
+```
 
 ## Configuration
 
@@ -53,42 +75,47 @@ The common media keys are:
 
 * `XF86VolumeMute`
 
+
 ## Lock screen
 
 Configure a keyboard shortcut:
 
 `~/.config/sway/config`
-
 ```
 bindsym --release Ctrl+Shift+l exec ',lock'
 ```
 
-`pacmatic -S --needed swayidle`
+(There is no need for `swayidle` to lock for you.)
 
-`~/.config/swayidle/config`
-
-```
-timeout 300 ',lock'
-before-sleep ',lock'
-after-sleep ',lock'
-```
 
 ## Notifications
 
-`pacmatic -S --needed dunst libnotify`
+`pacman -S --asexplicit dunst libnotify`
 
-<https://www.galago-project.org/specs/notification/>
+...
+
 
 ### App launcher
 
-yofi?
+Just launch from terminal like so:
+
+```sh
+setsid &>/dev/null firefox
+```
+
+Create an alias to just type `s firefox`.
+
 
 ### Screenshots
 
-flameshot?
+```sh
+pacman -S --asexplicit grim slurp swappy
+pacman -S --needed --asdeps wl-clipboard otf-font-awesome
+```
 
-### Screen Sharing
+...
+
 
 ### Screen Recording
 
-### Status Bar
+...

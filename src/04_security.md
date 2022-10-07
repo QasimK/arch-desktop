@@ -26,10 +26,10 @@ UMASK       027
 
 Further, systemd wants to be special:
 
-`/etc/systemd/system/user@1000.service.d/umask.conf`
+`/etc/systemd/system/user@1000.service.d/override.conf`
 ```ini
 [Service]
-UMask=027
+UMask=0027
 ```
 
 ## Restrict logins to specific accounts

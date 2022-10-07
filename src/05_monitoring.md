@@ -15,7 +15,7 @@ Monitor CPU + MEM + DISK + NET.
 ### Intel GPU
 
 ```sh
-pacmatic -S --needed intel-gpu-tools
+pacman -S --asexplicit intel-gpu-tools
 
 intel_gpu_top
 ```
@@ -45,7 +45,7 @@ Use `nice` and `ionice` to adjust cpu and io priority of a process.
 ### CPU
 
 ```sh
-pacmatic -S --needed stress
+pacman -S --asexplicit stress
 
 stress --cpu 12 --timeout 60
 ```

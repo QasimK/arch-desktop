@@ -3,13 +3,13 @@
 ## PDFs
 
 ```sh
-pacmatic -S --needed zathura
+pacman -S --asexplicit zathura
 ```
 
 Plugin for PDF, ePub and OpenXPS (there are more plugins):
 
 ```sh
-pacmatic -S --asdeps zathura-pdf-mupdf
+pacman -S --asdeps zathura-pdf-mupdf
 ```
 
 Set as default PDF reader:
@@ -26,12 +26,17 @@ Ref: <https://wiki.archlinux.org/title/PDF,_PS_and_DjVu>
 
 Note: `zathura` tracks history in `~/.local/share/zathura`.
 
+
 ### Modifying PDFs
+
+Consider `qpdf` (lightweight), or `mupdf-tools`.
+
+OLD:
 
 Use `pdftk`.
 
 ```sh
-pacmatic -S --needed pdftk
+pacman -S --asexplicit pdftk
 pacamtic -S --asdeps bcprov
 ```
 
@@ -40,10 +45,12 @@ pacamtic -S --asdeps bcprov
 ## Office
 
 ```
-pacmatic -S --needed libreoffice-fresh-en-gb hunspell-en_gb hyphen-en
+pacman -S --asexplicit libreoffice-fresh-en-gb hyphen-en hunspell-en_gb mythes-en
+pacman -S --needed --asdeps hunspell hyphen libmythes
 ```
 
 Consider poppler-data for pdf encodings??
+
 
 ## Calendar / Contacts
 

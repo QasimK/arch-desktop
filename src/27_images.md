@@ -4,7 +4,8 @@
 
 Use `imv`:
 
-`pacmatic -S --needed imv`
+`pacman -S --asexplicit imv`
+
 
 ## Screen capture
 
@@ -15,8 +16,8 @@ We can use a trio of tools to create a simple take-and-edit workflow:
 3. Finally, either copy it to the clipboard or save it to a file
 
 ```sh
-pacmatic -S --needed grim slurp swappy
-pacmatic -S --asdeps wl-clipboard otf-font-awesome
+pacman -S --asexplicit grim slurp swappy
+pacman -S --asdeps wl-clipboard otf-font-awesome
 ```
 
 Configure keyboard shortcut:

@@ -3,7 +3,7 @@
 It's unfortunate, but Firefox is all that's left... slowly dying...
 
 ```sh
-pacmatic -S --needed firefox-i18n-en-gb
+pacman -S --asexplicit firefox-i18n-en-gb
 ```
 
 We already set the environment variable:

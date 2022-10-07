@@ -1,9 +1,9 @@
-## GPU
+# GPU
 
 ## Intel
 
 ```sh
-pacmatic -S --needed mesa vulkan-intel intel-media-driver
+pacman -S --asexplicit mesa vulkan-intel intel-media-driver
 ```
 
 ## AMD
@@ -13,7 +13,7 @@ This will vary depending on your GPU manufacturer.
 Hardware acceleration for videos etc.
 
 ```sh
-pacmatic -S --needed mesa vulkan-radeon libva-mesa-driver mesa-vdpau
+pacman -S --asexplicit mesa vulkan-radeon libva-mesa-driver mesa-vdpau
 ```
 
 (`amdvlk` is pretty much the same as `vulkan-radeon` but has a larger install size)
@@ -22,20 +22,19 @@ Ref: <https://wiki.archlinux.org/title/AMDGPU>
 
 Ref: <https://wiki.archlinux.org/title/Hardware_video_acceleration#ATI/AMD>
 
-## Test
+
+## Testing
+
+Test Vulkan:
 
 ```sh
-pacmatic -S --needed vulkan-tools
-```
-
-```sh
+pacman -S --asexplicit vulkan-tools
 vulkaninfo
 ```
 
-```sh
-pacmatic -S --needed lib-va-utils
-```
+Test VAAPI:
 
 ```sh
+pacman -S --asexplicit lib-va-utils
 vainfo
 ```

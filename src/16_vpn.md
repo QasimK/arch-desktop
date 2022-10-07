@@ -2,7 +2,7 @@
 
 VPNs vary, but this is a generic way to connect to a WireGuard VPN.
 
-`pacmatic -S --needed wireguard-tools`
+`pacman -S --asexplicit wireguard-tools`
 
 Generate a WireGuard configuration file `vpn.conf`. This is out-of-scope of this guide.
 

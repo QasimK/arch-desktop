@@ -7,7 +7,7 @@ Spotify with `spotifyd` and `spotify-tui`.
 Creates a Spotify device (controllable via phone).
 
 ```sh
-pacmatic -S --needed spotifyd
+pacman -S --asexplicit spotifyd
 ```
 
 Configure: <https://spotifyd.github.io/spotifyd/config/File.html>

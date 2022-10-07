@@ -10,7 +10,7 @@ With cloud storage, sensitive documents should be encrypted locally.
 Synchronise files between devices using `syncthing`:
 
 ```sh
-pacmatic -S --needed syncthing
+pacman -S --asexplicit syncthing
 
 systemctl --user enable --now syncthing.service
 ```
@@ -21,8 +21,8 @@ The web interface is available at `http://localhost:8384/`.
 ## rclone (cloud storage)
 
 ```sh
-pacmatic -S --needed rclone
-pacmatic -S --needed --asdeps fuse2
+pacman -S --asexplicit rclone
+pacman -S --needed --asdeps fuse2
 ```
 
 
@@ -69,7 +69,7 @@ The [CryFs comparison table](https://www.cryfs.org/comparison) shows the main ad
 **Warning:** Data corruption is possible on power loss, system crashes, and multiple writers.
 
 ```sh
-pacmatic -S --needed cryfs
+pacman -S --asexplicit cryfs
 ```
 
 Create an encrypted folder:

@@ -1,16 +1,21 @@
 # Create a new user
 
 ```sh
-pacmatic -S --needed xdg-user-dirs
+pacman -S --asexplicit xdg-user-dirs
 useradd --create-home --shell /usr/bin/fish me
 passwd me
 ```
 
 Modify `~/.config/user-dirs.dirs` to change DESKTOP to Downloads, PUBLICSHARE to home.
 
+
 ## Auto-login
 
-`systemctl edit getty@tty1.service`
+Since a disk encryption password is used, auto-login speeds things up:
+
+```sh
+systemctl edit getty@tty1.service
+```
 
 ```ini
 [Service]

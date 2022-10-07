@@ -3,6 +3,8 @@
 Manage passwords with KeePassXC:
 
 ```
-pacmatic -S --needed keepassxc
-pacmatic -S --needed --asdeps qt5-wayland
+pacman -S --asexplicit keepassxc
+pacman -S --needed --asdeps qt5-wayland
 ```
+
+Use `syncthing` to sync the database file between devices.

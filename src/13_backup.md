@@ -25,8 +25,8 @@ We already protect against bit-rot using dm-integrity, but cannot recover if it 
 Use xattrs for mtime checks and a different directory for storage.
 
 ```sh
-pacmatic -S --needed borgmatic
-pacmatic -S --needed --asdeps python-llfuse
+pacman -S --asexplicit borgmatic
+pacman -S --needed --asdeps python-llfuse
 ```
 
 ## Bitrot

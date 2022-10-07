@@ -3,7 +3,7 @@
 Encryption.
 
 ```sh
-pacmatic -S --needed udisks2
+pacman -S --asexplicit udisks2
 ```
 
 
@@ -17,11 +17,11 @@ pacmatic -S --needed udisks2
 See: <https://wiki.archlinux.org/title/IOS>
 
 ```sh
-pacmatic -S --needed libimobiledevice
+pacman -S --asexplicit libimobiledevice
 ```
 
 ```
-# pacmatic -S --asdeps base-devel
+# pacman -S --asdeps base-devel
 $ git clone https://aur.archlinux.org/packages/ifuse-git/
 $ makepkg -sirc
 # pacman -Qtdq | pacman -Rns -

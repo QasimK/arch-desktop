@@ -5,8 +5,8 @@ We need a terminal emulator for the GUI.
 ## foot
 
 ```
-pacmatic -S --needed foot
-pacmatic -S --asdeps foot-terminfo
+pacman -S --asexplicit foot
+pacman -S --asdeps foot-terminfo
 ```
 
 TODO: Usage & config:

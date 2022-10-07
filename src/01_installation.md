@@ -56,11 +56,11 @@ pacstrap /mnt base linux linux-zen linux-lts intel-ucode efibootmgr \
 After `arch-chroot`, install optional dependencies:
 
 ```sh
-pacmatic -S --needed --asdeps linux-firmware    # linux
-pacmatic -S --needed --asdeps wireless-regdb    # iwd
-pacmatic -S --needed --asdeps pkgfile           # fish
-pacmatic -S --needed --asdeps python-html2text  # pacmatic
-pacmatic -S --needed --asdeps lm_sensors lsof   # htop
+pacman -S --needed --asdeps linux-firmware    # linux
+pacman -S --needed --asdeps wireless-regdb    # iwd
+pacman -S --needed --asdeps pkgfile           # fish
+pacman -S --needed --asdeps python-html2text  # pacmatic
+pacman -S --needed --asdeps lm_sensors lsof   # htop
 ```
 
 ## Boot Loader
@@ -68,9 +68,8 @@ pacmatic -S --needed --asdeps lm_sensors lsof   # htop
 Remove an unnecessary present:
 
 ```sh
-rm /etc/mkinitcpio.d/linux-lts.preset
+truncate /etc/mkinitcpio.d/linux-lts.preset
 ```
-TODO: Does that `rm` actually work?
 
 
 Generate unified kernel images:

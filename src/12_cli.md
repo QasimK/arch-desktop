@@ -2,32 +2,40 @@
 
 The CLI tools are an excellent complement to a GUI.
 
+
 ## Scripting
 
-Use `dash` for scripts because it has a faster start up time (1.5ms vs 3ms for bash).
+Use `dash` for scripts because it has a faster start up time (1.5ms vs 3ms for `bash`).
 
 ```sh
-pacmatic -S --needed dash
+pacman -S --asexplicit dash
 ```
 
 Use `shellcheck` to check scripts for errors.
 
 ```sh
-pacmatic -S --needed shellcheck
+pacman -S --asexplicit shellcheck
 ```
 
 Use `checkbashisms` to check for `sh` vs `bash` peculiarities:
 
 ```sh
-pacmatic -S --needed checkbashisms
+pacman -S --asexplicit checkbashisms
 ```
+
+Common scripting helpers:
+
+```sh
+pacman -S --asexplicit fzf
+```
+
 
 ## Lock screen
 
 I have found `swaylock` to actually be surprisingly unreliable. Instead use `physlock`:
 
 ```sh
-pacmatic -S --needed physlock
+pacman -S --asexplicit physlock
 ```
 
 Lock with `physlock -m`.
@@ -45,9 +53,56 @@ exec physlock -ms
 
 Ref: <https://old.reddit.com/r/swaywm/comments/n344ey/swaylock_alternatives/gx0jkt8/>
 
+
+## Trash
+
+A safer way to delete.
+
+```sh
+pacman -S --asexplicit trash-cli
+```
+
+Note: there are various commands starting with `trash*`!
+
+Automatically delete after 30 days:
+
+`~/.config/systemd/user/trash.service`
+```ini
+[Unit]
+Description=Delete old trash
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/trash-empty -f 30
+Nice=19
+```
+
+`~/.config/systemd/user/trash.timer`
+```ini
+[Unit]
+Description=Empty trash daily
+
+[Timer]
+OnStartupSec=1 minute
+
+[Install]
+WantedBy=timers.target
+```
+
+```sh
+systemctl --user enable --now trash.timer
+```
+
+
+## Opening files / setting default applications
+
+```sh
+pacman -S --asexplicit handlr
+```
+
+This is better than xdg-...
+
+
 ## Other
 
-* `mosh`, `fish`, `vim`
 * `nnn` - file browser
-* `trash-cli` - it's safer!
-* `desktop-file-utils` - for creating .desktop files?

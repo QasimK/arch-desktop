@@ -25,7 +25,7 @@ timedatectl set-ntp true
 
 ## Pacman settings
 
-Configure `/etc/pacman.conf` to enable `Color`, `VerbosePkgLists`.
+Configure `/etc/pacman.conf` to enable `Color`, `VerbosePkgLists`, and `ParallelDownloads`.
 
 
 ### Backup the local database
@@ -55,7 +55,7 @@ Exec = /usr/bin/tar --create --zstd --file /root/backups/pacman-db.zstd.tar --di
 Install `paccache`:
 
 ```sh
-pacmatic -S --needed pacman-contrib
+pacman -S --asexplicit pacman-contrib
 ```
 
 Automatically remove all versions of an uninstalled package:
@@ -94,7 +94,7 @@ Exec = /usr/bin/paccache -rk3
 Optimise the mirror list using `reflector`:
 
 ```sh
-pacmatic -S --needed reflector`.
+pacman -S --asexplicit reflector`.
 ```
 
 `/etc/xdg/reflector/reflector.conf`
@@ -114,6 +114,13 @@ Ignore new mirrorlist files:
 `/etc/pacman.conf`
 ```ini
 NoExtract = etc/pacman.d/mirrorlist
+```
+
+
+### Ignore common pacnews
+
+```ini
+NoExtract = etc/locale.gen
 ```
 
 
@@ -142,7 +149,7 @@ SystemMaxUse=100M
 Use `doas` instead of `sudo` because it is simpler.
 
 ```sh
-pacmatic -S --needed opendoas
+pacman -S --asexplicit opendoas
 ```
 
 
@@ -178,7 +185,7 @@ touch -- /-i && chmod 0444 -- /-i
 The primary tool is `tlp`:
 
 ```sh
-pacmatic -S --needed tlp
+pacman -S --asexplicit tlp
 ```
 
 ```sh
@@ -209,9 +216,9 @@ i915.enable_fbc=1 nvme.noacpi=1
 
 Stop the cursor from blinking (yes, it makes a measurable difference!):
 
-`/etc/rc.local`
+`/etc/tmpfiles.d/cursor_blink.conf`
 ```txt
-echo 0 > /sys/class/graphics/fbcon/cursor_blink
+w /sys/class/graphics/fbcon/cursor_blink - - - - 0
 ```
 
 ### Powertop

@@ -2,12 +2,19 @@
 
 Some people say ALSA only supports audio from one application at a time, but... that is simply not true.
 
-`pacmatic -S --needed alsa-utils`
+```sh
+pacman -S --asexplicit alsa-utils
+pacman -S --asdeps jack2
+```
+
+The `jack2` dependency is because some applications (mpv, firefox) require a jack dependency. (This prevents us from installing pipewire/pulseaudio.)
 
 Use `alsamixer` to explore your speakers and microphones. Find the right "card" with `F6`.
 
+```txt
 MM = Mute
 00 = Open
+```
 
 ## Set default
 
