@@ -136,7 +136,7 @@
                     <main>
                         <h1 id="network"><a class="header" href="#network">Network</a></h1>
 <h2 id="wifi"><a class="header" href="#wifi">WiFi</a></h2>
-<pre><code class="language-sh">pacman -S --asexplicit iwd
+<pre><code class="language-sh">pacman -S --needed iwd
 systemctl enable --now iwd.service
 </code></pre>
 <p>Use <code>iwctl</code> to connect to WiFi</p>
@@ -184,7 +184,7 @@ nameserver=1.1.1.1
 <li>DNS queries have no privacy.</li>
 </ul>
 <p>Instead, use <code>dnscrypt-proxy</code>:</p>
-<pre><code class="language-sh">pacman -S --asexplicit dnscrypt-proxy
+<pre><code class="language-sh">pacman -S --needed dnscrypt-proxy
 </code></pre>
 <p>There are a number of options like DoH (DNS-over-HTTPS), oDoh (Oblivious DoH), or DNSCrypt. We will use oDOH.</p>
 <p><code>/etc/dnscrypt-proxy/dnscrypt-proxy.toml</code></p>
@@ -218,7 +218,7 @@ skip_incompatible = true
 </code></pre>
 <h2 id="samba-mounts"><a class="header" href="#samba-mounts">Samba Mounts</a></h2>
 <p>Certain mount options like <code>credentials</code> require <code>cifs-utils</code>:</p>
-<pre><code class="language-sh">pacman -S --asexplicit cifs-utils
+<pre><code class="language-sh">pacman -S --needed cifs-utils
 </code></pre>
 <p>Example mount file:</p>
 <pre><code class="language-ini">[Unit]

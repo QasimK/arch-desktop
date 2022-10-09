@@ -259,7 +259,7 @@ efibootmgr \
 TODO: Splash image</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="network"><a class="header" href="#network">Network</a></h1>
 <h2 id="wifi"><a class="header" href="#wifi">WiFi</a></h2>
-<pre><code class="language-sh">pacman -S --asexplicit iwd
+<pre><code class="language-sh">pacman -S --needed iwd
 systemctl enable --now iwd.service
 </code></pre>
 <p>Use <code>iwctl</code> to connect to WiFi</p>
@@ -307,7 +307,7 @@ nameserver=1.1.1.1
 <li>DNS queries have no privacy.</li>
 </ul>
 <p>Instead, use <code>dnscrypt-proxy</code>:</p>
-<pre><code class="language-sh">pacman -S --asexplicit dnscrypt-proxy
+<pre><code class="language-sh">pacman -S --needed dnscrypt-proxy
 </code></pre>
 <p>There are a number of options like DoH (DNS-over-HTTPS), oDoh (Oblivious DoH), or DNSCrypt. We will use oDOH.</p>
 <p><code>/etc/dnscrypt-proxy/dnscrypt-proxy.toml</code></p>
@@ -341,7 +341,7 @@ skip_incompatible = true
 </code></pre>
 <h2 id="samba-mounts"><a class="header" href="#samba-mounts">Samba Mounts</a></h2>
 <p>Certain mount options like <code>credentials</code> require <code>cifs-utils</code>:</p>
-<pre><code class="language-sh">pacman -S --asexplicit cifs-utils
+<pre><code class="language-sh">pacman -S --needed cifs-utils
 </code></pre>
 <p>Example mount file:</p>
 <pre><code class="language-ini">[Unit]
@@ -382,8 +382,11 @@ timedatectl set-ntp true
 <p>Configure <code>/etc/pacman.conf</code> to enable <code>Color</code>, <code>VerbosePkgLists</code>, and <code>ParallelDownloads</code>.</p>
 <h3 id="backup-the-local-database"><a class="header" href="#backup-the-local-database">Backup the local database</a></h3>
 <p>Backup the local pacman database when it changes to facilitate restore:</p>
-<p><code>/etc/pacman.d/hooks/pacbackup.hook</code></p>
-<pre><code class="language-ini">[Trigger]
+<pre><code class="language-sh">mkdir -p /root/backups/var/lib/pacman/local
+
+`/etc/pacman.d/hooks/pacbackup.hook`
+```ini
+[Trigger]
 Operation = Install
 Operation = Upgrade
 Operation = Remove
@@ -399,31 +402,10 @@ Exec = /usr/bin/tar --create --zstd --file /root/backups/pacman-db.zstd.tar --di
 <h3 id="clean-up-cached-files"><a class="header" href="#clean-up-cached-files">Clean-up cached files</a></h3>
 <p>Install <code>paccache</code>:</p>
 <pre><code class="language-sh">pacman -S --asexplicit pacman-contrib
+systeml enable --now paccache.timer
 </code></pre>
-<p>Automatically remove all versions of an uninstalled package:</p>
-<p><code>/etc/pacman.d/hooks/paccache-remove.hook</code></p>
-<pre><code class="language-ini">[Trigger]
-Operation = Remove
-Type = Package
-Target = *
-
-[Action]
-Description = Removing package cache for uninstalled packages...
-When = PostTransaction
-Exec = /usr/bin/paccache -ruk0
-</code></pre>
-<p>Keep only the latest three versions of each installed package:</p>
-<p><code>/etc/pacman.d/hooks/paccache-upgrade.hook</code></p>
-<pre><code class="language-ini">[Trigger]
-Operation = Upgrade
-Type = Package
-Target = *
-
-[Action]
-Description = Removing old cached packages...
-When = PostTransaction
-Exec = /usr/bin/paccache -rk3
-</code></pre>
+<p>The timer will clean the local store of packages weekly and keep only the
+three latest versions of each package.</p>
 <h3 id="reflector"><a class="header" href="#reflector">Reflector</a></h3>
 <p>Optimise the mirror list using <code>reflector</code>:</p>
 <pre><code class="language-sh">pacman -S --asexplicit reflector`.

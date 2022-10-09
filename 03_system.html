@@ -151,8 +151,11 @@ timedatectl set-ntp true
 <p>Configure <code>/etc/pacman.conf</code> to enable <code>Color</code>, <code>VerbosePkgLists</code>, and <code>ParallelDownloads</code>.</p>
 <h3 id="backup-the-local-database"><a class="header" href="#backup-the-local-database">Backup the local database</a></h3>
 <p>Backup the local pacman database when it changes to facilitate restore:</p>
-<p><code>/etc/pacman.d/hooks/pacbackup.hook</code></p>
-<pre><code class="language-ini">[Trigger]
+<pre><code class="language-sh">mkdir -p /root/backups/var/lib/pacman/local
+
+`/etc/pacman.d/hooks/pacbackup.hook`
+```ini
+[Trigger]
 Operation = Install
 Operation = Upgrade
 Operation = Remove
@@ -168,31 +171,10 @@ Exec = /usr/bin/tar --create --zstd --file /root/backups/pacman-db.zstd.tar --di
 <h3 id="clean-up-cached-files"><a class="header" href="#clean-up-cached-files">Clean-up cached files</a></h3>
 <p>Install <code>paccache</code>:</p>
 <pre><code class="language-sh">pacman -S --asexplicit pacman-contrib
+systeml enable --now paccache.timer
 </code></pre>
-<p>Automatically remove all versions of an uninstalled package:</p>
-<p><code>/etc/pacman.d/hooks/paccache-remove.hook</code></p>
-<pre><code class="language-ini">[Trigger]
-Operation = Remove
-Type = Package
-Target = *
-
-[Action]
-Description = Removing package cache for uninstalled packages...
-When = PostTransaction
-Exec = /usr/bin/paccache -ruk0
-</code></pre>
-<p>Keep only the latest three versions of each installed package:</p>
-<p><code>/etc/pacman.d/hooks/paccache-upgrade.hook</code></p>
-<pre><code class="language-ini">[Trigger]
-Operation = Upgrade
-Type = Package
-Target = *
-
-[Action]
-Description = Removing old cached packages...
-When = PostTransaction
-Exec = /usr/bin/paccache -rk3
-</code></pre>
+<p>The timer will clean the local store of packages weekly and keep only the
+three latest versions of each package.</p>
 <h3 id="reflector"><a class="header" href="#reflector">Reflector</a></h3>
 <p>Optimise the mirror list using <code>reflector</code>:</p>
 <pre><code class="language-sh">pacman -S --asexplicit reflector`.
