@@ -32,6 +32,9 @@ Configure `/etc/pacman.conf` to enable `Color`, `VerbosePkgLists`, and `Parallel
 
 Backup the local pacman database when it changes to facilitate restore:
 
+```sh
+mkdir -p /root/backups/var/lib/pacman/local
+
 `/etc/pacman.d/hooks/pacbackup.hook`
 ```ini
 [Trigger]
@@ -56,37 +59,11 @@ Install `paccache`:
 
 ```sh
 pacman -S --asexplicit pacman-contrib
+systeml enable --now paccache.timer
 ```
 
-Automatically remove all versions of an uninstalled package:
-
-`/etc/pacman.d/hooks/paccache-remove.hook`
-```ini
-[Trigger]
-Operation = Remove
-Type = Package
-Target = *
-
-[Action]
-Description = Removing package cache for uninstalled packages...
-When = PostTransaction
-Exec = /usr/bin/paccache -ruk0
-```
-
-Keep only the latest three versions of each installed package:
-
-`/etc/pacman.d/hooks/paccache-upgrade.hook`
-```ini
-[Trigger]
-Operation = Upgrade
-Type = Package
-Target = *
-
-[Action]
-Description = Removing old cached packages...
-When = PostTransaction
-Exec = /usr/bin/paccache -rk3
-```
+The timer will clean the local store of packages weekly and keep only the
+three latest versions of each package.
 
 
 ### Reflector

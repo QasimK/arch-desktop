@@ -3,7 +3,7 @@
 ## WiFi
 
 ```sh
-pacman -S --asexplicit iwd
+pacman -S --needed iwd
 systemctl enable --now iwd.service
 ```
 
@@ -82,7 +82,7 @@ nameserver=1.1.1.1
 Instead, use `dnscrypt-proxy`:
 
 ```sh
-pacman -S --asexplicit dnscrypt-proxy
+pacman -S --needed dnscrypt-proxy
 ```
 
 There are a number of options like DoH (DNS-over-HTTPS), oDoh (Oblivious DoH), or DNSCrypt. We will use oDOH.
@@ -134,7 +134,7 @@ systemctl enable --now wgquick@...
 Certain mount options like `credentials` require `cifs-utils`:
 
 ```sh
-pacman -S --asexplicit cifs-utils
+pacman -S --needed cifs-utils
 ```
 
 Example mount file:

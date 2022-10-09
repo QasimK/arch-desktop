@@ -6,6 +6,7 @@ We are finally here.
 
 ```sh
 pacman -S --asexplicit sway
+usermod -aG seat me
 ```
 
 ## Start script

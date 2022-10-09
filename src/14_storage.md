@@ -25,6 +25,37 @@ pacman -S --asexplicit rclone
 pacman -S --needed --asdeps fuse2
 ```
 
+Automatically mounting remotes:
+
+`~/.config/systemd/user/rclone@.service`
+```ini
+[Unit]
+Description=Mount %i: using rclone into ~/mnt/%i
+AssertPathIsDirectory=%h/mnt/%i
+StartLimitIntervalSec=5min
+StartLimitBurst=10
+
+[Service]
+Type=notify
+ExecStart=/usr/bin/rclone mount --config %h/.config/rclone/rclone.conf --cache-dir %h/.cache/rclone --vfs-cache-mode full --write-back-cache --mask 027 %i: %h/mnt/%i
+ExecStop=/usr/bin/fusermount -u %h/mnt/%i
+Restart=on-failure
+RestartSec=10s
+
+[Install]
+WantedBy=default.target
+```
+
+Enable for remote `remote:`
+
+```sh
+systemctl --user enable --now rclone@remote.service
+```
+
+TODO: Look at automount again, this time set mount.rclone binary.
+
+Note .mount works, but the .automount does not work - not permitted for users.
+
 
 ### Google Drive
 
