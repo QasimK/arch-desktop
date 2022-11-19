@@ -96,12 +96,21 @@ Set the kernel parameters:
 
 `/etc/kernel/cmdline`:
 ```
-rw quiet bgrt_disable root=/dev/nvme0n1p2
+rw root=/dev/nvme0n1p2 bgrt_disable quiet nowatchdog nmi_watchdog=0 loglevel=3 systemd.show_status=auto
 ```
 
 * `quiet` stops printing log messages
 * `bgrt_disable` hides the OEM splash image
+* `nowatchdog nmi_watchdog=0` disables watchdog for better power consumption
+* `loglevel=3 systemd.show_status=auto` print only errors on boot
 
+Disable watchdog (laptop dependent?):
+
+`/etc/modprobe.d/watchdog`
+```
+blacklist iCTO_wdt
+blacklist iCTO_vendor_support
+```
 
 Create a script `efiboot.sh`:
 
