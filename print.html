@@ -221,12 +221,19 @@ fallback_options=&quot;-S autodetect&quot;
 </code></pre>
 <p>Set the kernel parameters:</p>
 <p><code>/etc/kernel/cmdline</code>:</p>
-<pre><code>rw quiet bgrt_disable root=/dev/nvme0n1p2
+<pre><code>rw root=/dev/nvme0n1p2 bgrt_disable quiet nowatchdog nmi_watchdog=0 loglevel=3 systemd.show_status=auto
 </code></pre>
 <ul>
 <li><code>quiet</code> stops printing log messages</li>
 <li><code>bgrt_disable</code> hides the OEM splash image</li>
+<li><code>nowatchdog nmi_watchdog=0</code> disables watchdog for better power consumption</li>
+<li><code>loglevel=3 systemd.show_status=auto</code> print only errors on boot</li>
 </ul>
+<p>Disable watchdog (laptop dependent?):</p>
+<p><code>/etc/modprobe.d/watchdog</code></p>
+<pre><code>blacklist iCTO_wdt
+blacklist iCTO_vendor_support
+</code></pre>
 <p>Create a script <code>efiboot.sh</code>:</p>
 <pre><code class="language-sh">#!/bin/bash
 # Create boot entries
