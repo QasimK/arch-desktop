@@ -26,7 +26,7 @@ This is not recommended — use a self-encrypting drive.
 ## Filesystems
 
 ```sh
-mkfs.ext4 -v -L root -T huge -m 1 -O encrypt /dev/nvme0n1p1
+mkfs.ext4 -v -L rootfs -T huge -m 1 -O encrypt /dev/nvme0n1p2
 ```
 
 * `huge` is one inode per 64k; the default is one per 16k
@@ -38,7 +38,7 @@ When mounting:
 
 ```sh
 mount -o noatime,lazytime /dev/nvme0n1p2 /mnt
-mount -o noatime,lazytime /dev/nvme0n1pi /mnt/efi
+mount -o noatime,lazytime /dev/nvme0n1p1 /mnt/efi
 ```
 
 (Do not use `relatime`.)
@@ -49,7 +49,7 @@ mount -o noatime,lazytime /dev/nvme0n1pi /mnt/efi
 These are essential packages!
 
 ```sh
-pacstrap /mnt base linux linux-zen linux-lts intel-ucode efibootmgr \
+pacstrap -K /mnt base linux linux-lts intel-ucode efibootmgr \
     man-db man-pages texinfo vim tmux htop fish iwd python pacmatic
 ```
 
@@ -70,6 +70,21 @@ Remove an unnecessary present:
 ```sh
 truncate /etc/mkinitcpio.d/linux-lts.preset
 ```
+
+Create folder:
+
+```sh
+mkdir -p /etc/EFI/boot
+```
+
+Modify the default config:
+
+`/etc/mkinitcpio.conf`
+```
+COMPRESSION="cat"
+```
+
+* `cat` reduces the load time because NVME drives are blazing-fast now.
 
 
 Generate unified kernel images:
@@ -115,12 +130,11 @@ blacklist iCTO_vendor_support
 Create a script `efiboot.sh`:
 
 ```sh
-#!/bin/bash
+#!/bin/sh
 # Create boot entries
-# List: efibootmgr
-# Delete: efibootmgr -Bb xxxx
+# List:    efibootmgr
+# Delete:  efibootmgr -Bb xxxx
 # Reorder: efibootmgr -o xxxx,yyyy
-set -euo pipefail
 
 efibootmgr \
     --verbose \
@@ -131,16 +145,6 @@ efibootmgr \
     --loader /archlinux.efi \
     --unicode
 ```
-
-
-Modify the default config:
-
-`/etc/mkinitcpio.conf`
-```
-COMPRESSION="cat"
-```
-
-* `cat` reduces the load time because NVME drives are blazing-fast now.
 
 
 Finally, re-generate the boot images:

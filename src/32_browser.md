@@ -6,7 +6,7 @@ It's unfortunate, but Firefox is all that's left... slowly dying...
 pacman -S --asexplicit firefox-i18n-en-gb
 ```
 
-We already set the environment variable:
+We already set the environment variable in the sway startup script.
 
 ```
 MOZ_ENABLE_WAYLAND=1

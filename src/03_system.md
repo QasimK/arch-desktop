@@ -47,7 +47,7 @@ Target = *
 [Action]
 Description = Backing up database...
 When = PostTransaction
-Exec = /usr/bin/tar --create --zstd --file /root/backups/pacman-db.zstd.tar --directory / var/lib/pacman/local
+Exec = /usr/bin/tar --create --zstd --file /root/backups/var/lib/pacman/local/pacman-db.zstd.tar --directory / var/lib/pacman/local
 ```
 
 (NOTE: Space at the start of `/ var/lib/pacman/local` is deliberate.)
@@ -59,7 +59,7 @@ Install `paccache`:
 
 ```sh
 pacman -S --asexplicit pacman-contrib
-systeml enable --now paccache.timer
+systemctl enable --now paccache.timer
 ```
 
 The timer will clean the local store of packages weekly and keep only the
@@ -94,7 +94,7 @@ NoExtract = etc/pacman.d/mirrorlist
 ```
 
 
-### Ignore common pacnews
+### Ignore other common pacnews
 
 ```ini
 NoExtract = etc/locale.gen

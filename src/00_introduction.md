@@ -13,7 +13,8 @@ It is divided into:
 * 2z (desktop)
 * 3a (apps)
 * 4b (coding)
-* 9c (appendix)
+* 8c (cheat-sheats)
+* 9d (appendix)
 
 Note: `me` will refer to our main user account.
 

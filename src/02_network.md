@@ -14,6 +14,12 @@ Use `iwctl` to connect to WiFi
 
 Uncomment the wireless regulation domain in `/etc/conf.d/wireless-regdom`.
 
+Ignore
+
+`/etc/pacman.conf`
+```ini
+NoExtract = etc/conf.d/wireless-regdom
+```
 
 ### Static Network
 

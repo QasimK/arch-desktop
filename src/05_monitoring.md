@@ -39,6 +39,8 @@ Use `cpulimit` to limit cpu core usage of a process.
 
 Use `nice` and `ionice` to adjust cpu and io priority of a process.
 
+NOTE: autogroup! nice will not work. ionice is placebo for ssds.
+
 
 ## Stress Testing
 

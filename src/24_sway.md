@@ -33,15 +33,10 @@ Run it with `exec ,sway`.
 
 Stop the `at-spi-bus-launcher` process from starting (`firefox`):
 
-`.pam_environment`
+This should be configured in your shell.
+
 ```
 # Disable accessibility service
-NO_AT_BRIDGE=1
-```
-
-`/etc/systemd/system/user@1000.service.d/override.conf`
-```
-[System]
 NO_AT_BRIDGE=1
 ```
 
