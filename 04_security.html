@@ -4,8 +4,10 @@
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
         <title>Security - Arch Desktop</title>
+
+
         <!-- Custom HTML head -->
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        
         <meta name="description" content="Installation of Arch Linux on a Computer">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
@@ -16,25 +18,29 @@
         <link rel="stylesheet" href="css/general.css">
         <link rel="stylesheet" href="css/chrome.css">
         <link rel="stylesheet" href="css/print.css" media="print">
+
         <!-- Fonts -->
         <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
         <link rel="stylesheet" href="fonts/fonts.css">
+
         <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
+
     </head>
     <body>
+    <div id="body-container">
         <!-- Provide site root to javascript -->
-        <script type="text/javascript">
+        <script>
             var path_to_root = "";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
+        <script>
             try {
                 var theme = localStorage.getItem('mdbook-theme');
                 var sidebar = localStorage.getItem('mdbook-sidebar');
@@ -50,7 +56,7 @@
         </script>
 
         <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
+        <script>
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
@@ -62,12 +68,14 @@
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
+        <script>
             var html = document.querySelector('html');
-            var sidebar = 'hidden';
+            var sidebar = null;
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
             }
             html.classList.remove('sidebar-visible');
             html.classList.add("sidebar-" + sidebar);
@@ -83,7 +91,7 @@
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
-                <div id="menu-bar-hover-placeholder"></div>
+                                <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky bordered">
                     <div class="left-buttons">
                         <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
@@ -93,7 +101,7 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
@@ -110,6 +118,7 @@
                         <a href="print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
+
                     </div>
                 </div>
 
@@ -123,8 +132,9 @@
                         </ul>
                     </div>
                 </div>
+
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
+                <script>
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
                     document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
                     Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
@@ -139,17 +149,16 @@
 <p><a href="https://wiki.archlinux.org/title/Security">https://wiki.archlinux.org/title/Security</a></p>
 <p>This XKCD is extremely relevant <a href="https://xkcd.com/1200/">https://xkcd.com/1200/</a>.</p>
 <h2 id="umask"><a class="header" href="#umask">umask</a></h2>
-<p>As described in <code>man pam_umask</code>, set the global umask for all logins:</p>
-<p><code>/etc/pam.d/login</code></p>
-<pre><code>session optional pam_umask.so
+<p>As described in <code>man pam_umask</code>, override the global umask for all logins:</p>
+<p><code>/etc/pam.d/system-login</code></p>
+<pre><code>session optional pam_umask.so umask=0027
 </code></pre>
-<p>Override the default umask:</p>
-<p><code>/etc/login.defs</code></p>
-<pre><code>UMASK       027
+<p>Override the default umask for bash:</p>
+<p><code>/etc/profile.d/umask.sh</code></p>
+<pre><code>umask 0027
 </code></pre>
-<p><strong>Remove</strong> <code>umask=</code> line in <code>/etc/profile</code>.</p>
-<p>Further, systemd wants to be special:</p>
-<p><code>/etc/systemd/system/user@1000.service.d/override.conf</code></p>
+<p>Further, set the global umask for all user services:</p>
+<p><code>/etc/systemd/system/user@.service.d/umask.conf</code></p>
 <pre><code class="language-ini">[Service]
 UMask=0027
 </code></pre>
@@ -180,23 +189,38 @@ net.ipv6.conf.all.disable_ipv6 = 1
 net.ipv6.conf.default.disable_ipv6 = 1
 </code></pre>
 <h2 id="lockdown-mode"><a class="header" href="#lockdown-mode">Lockdown Mode</a></h2>
-<p><strong>If NOT using hibernation:</strong> enable lockdown mode.</p>
+<p><strong>If NOT using hibernation,</strong> enable lockdown mode.</p>
+<p>Kernal parameter in <code>/etc/kernel/cmdline</code>: <code>lockdown=confidentiality</code></p>
+<p>Rebuild boot image with <code>mkinitcpio -P</code>.</p>
+<h2 id="sign-modules"><a class="header" href="#sign-modules">Sign modules</a></h2>
+<p><strong>If NOT using custom kernel modules</strong>, enforce module signatures.</p>
+<p>Kernal parameter in <code>/etc/kernel/cmdline</code>: <code>module.sig_enforce=1</code></p>
+<p>Rebuild boot image with <code>mkinitcpio -P</code>.</p>
 <h2 id="resource-limits"><a class="header" href="#resource-limits">Resource limits</a></h2>
 <p>The Arch wiki describes many useful limits.</p>
 <p><a href="https://wiki.archlinux.org/title/Limits.conf">https://wiki.archlinux.org/title/Limits.conf</a></p>
 <p><code>/etc/security/limits.d/limits.conf</code></p>
-<pre><code>*           soft    core       0           # Prevent corefiles from being generated by default
-*           hard    core       unlimited   # Allow corefiles to be temporarily enabled with ulimit -c unlimited
+<pre><code># Prevent corefiles from being generated by default
+# But allow corefiles to be temporarily enabled with ulimit -c unlimited
+*           soft    core       0
+*           hard    core       unlimited
 
-*           hard    nice       -19         # Prevent non-root users from running a process at minimal niceness
-root        hard    nice       -20         # Allows root to run a process when system is unresponsive
+# Prevent non-root users from running a process at minimal niceness
+# But allow root to run a process when system is unresponsive
+*           hard    nice       -19
+root        hard    nice       -20
 
-*           soft    nofile     100000      # Increase the default max number of files because it is useful
-*           hard    nofile     1048576     # Increase the max from 2^19 to the max-max of 2^20
+# Increase the default max number of files because it is useful
+# Increase the max from 2^19 to the max-max of 2^20
+*           soft    nofile     100000
+*           hard    nofile     1048576
 
-*           hard    nproc      1000        # Prevent fork-bombs from taking out the system
-root        hard    nproc      10000       # Prevent root from not being able to launch enough processes
+# Prevent fork-bombs from taking out the system
+# But allow root to launch more processes
+*           hard    nproc      10000
+root        hard    nproc      100000
 </code></pre>
+<p>Note: Firefox does not like a limit of 1000 processes.</p>
 
                     </main>
 
@@ -205,9 +229,11 @@ root        hard    nproc      10000       # Prevent root from not being able to
                             <a rel="prev" href="03_system.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
+
                             <a rel="next" href="05_monitoring.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
+
                         <div style="clear: both"></div>
                     </nav>
                 </div>
@@ -217,6 +243,7 @@ root        hard    nproc      10000       # Prevent root from not being able to
                     <a rel="prev" href="03_system.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
+
                     <a rel="next" href="05_monitoring.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
@@ -224,16 +251,25 @@ root        hard    nproc      10000       # Prevent root from not being able to
 
         </div>
 
-        <script type="text/javascript">
+
+
+
+        <script>
             window.playground_copyable = true;
         </script>
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
 
         <!-- Custom JS scripts -->
+
+
+    </div>
     </body>
 </html>
