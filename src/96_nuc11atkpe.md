@@ -50,8 +50,6 @@ No power button menu.
 Download the .cab file from the Intel Website, place on to a USB stick, and
 press F7 on power-up to enter the UEFI update menu.
 
-[TOOD: Version 37]()
-
 
 ## Power Consumption
 
@@ -76,5 +74,5 @@ the HDMI input or not so long as it is connected.
 The overall power consumption with all of the above plugged in was 5.3 W which
 is slightly higher than the sum of the individual components due to rounding.
 
-Thus using the NUC in headless mode saves ~£5/year with 2022 electricity prices
+Thus using the NUC in headless mode saves ~£7/year with 2022 electricity prices
 of 0.39 p/kWh.
