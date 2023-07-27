@@ -67,10 +67,22 @@ Use `libinput debug-events --show-keycodes` to get keyboard keys.
 
 (THIS IS WRONG, YOU WANT `wev` but that is AUR!)
 
+Configure your key bindings.
+
 The common media keys are:
 
 * `XF86VolumeMute`
+* `XF86AudioLowerVolume`
+* `XF86AudioRaiseVolume`
+* `XF86AudioPlay`
+* `XF86AudioStop`
+* `XF86AudioNext`
+* `XF86AudioPrev`
 
+
+## Compose Key
+
+https://wiki.archlinux.org/title/Xorg/Keyboard_configuration#Configuring_compose_key
 
 ## Lock screen
 
