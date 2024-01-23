@@ -121,3 +121,7 @@ root        hard    nproc      100000
 ```
 
 Note: Firefox does not like a limit of 1000 processes.
+
+## rfkill
+
+TODO: permanent software block of bluetooth, where hardware is not possible
