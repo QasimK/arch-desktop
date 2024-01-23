@@ -23,6 +23,12 @@ Override the default umask for bash:
 umask 0027
 ```
 
+Override in /etc/login.defs:
+
+```
+UMASK 027
+```
+
 Further, set the global umask for all user services:
 
 `/etc/systemd/system/user@.service.d/umask.conf`

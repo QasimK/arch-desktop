@@ -103,6 +103,18 @@ pacman -S --asexplicit handlr
 This is better than xdg-...
 
 
+## fish & fzf-integration
+
+
+## Drag and Drop from Terminal
+
+<https://github.com/vimpostor/blobdrop/>
+
+install with `pacman -U file.pkg.tar.zst`.
+
+TODO: nnn keyboard shortcut
+
 ## Other
 
 * `nnn` - file browser
+* `unzip`
